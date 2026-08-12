@@ -280,7 +280,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
     <div><h1>Electro Martin's</h1><span>Hoja de Ruta Directa</span></div>
   </div>
   <div class="hdr-right">
-    <div class="sbadge" id="sbadge"><div class="sdot"></div><span id="stxt">Conectando...</span></div>
+    <div class="sbadge" id="sbadge" onclick="cargarDatos()" style="cursor:pointer" title="Click para reintentar la conexión"><div class="sdot"></div><span id="stxt">Conectando...</span></div>
     <div class="ubadge" id="ubadge">👤 <span id="unombre"></span></div>
     <button class="btnH no-print" onclick="abrirPanel()">👁 Panel</button>
     <button class="btnH no-print" onclick="exportarExcel()">📊 Excel</button>
@@ -482,6 +482,18 @@ function confirmarUsuario(){
 // ═══════════════════════════════════════════════
 // JWT
 // ═══════════════════════════════════════════════
+
+async function fetchT(url, opts, ms){
+  ms = ms || 15000;
+  const ctrl = new AbortController();
+  const id = setTimeout(function(){ ctrl.abort(); }, ms);
+  try {
+    return await fetch(url, Object.assign({}, opts, { signal: ctrl.signal }));
+  } finally {
+    clearTimeout(id);
+  }
+}
+
 async function token(){
   if(S.tok&&Date.now()<S.tokExp-60000) return S.tok;
   const now=Math.floor(Date.now()/1000);
@@ -495,7 +507,7 @@ async function token(){
     {name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['sign']);
   const sig=await crypto.subtle.sign('RSASSA-PKCS1-v1_5',key,new TextEncoder().encode(si));
   const jwt=si+'.'+b64u(sig);
-  const r=await fetch('https://oauth2.googleapis.com/token',{method:'POST',
+  const r=await fetchT('https://oauth2.googleapis.com/token',{method:'POST',
     headers:{'Content-Type':'application/x-www-form-urlencoded'},
     body:`grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`});
   const d=await r.json();
@@ -512,27 +524,27 @@ function b64u(v){
 // SHEETS API
 // ═══════════════════════════════════════════════
 async function sRead(r){
-  const res=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CFG.SID}/values/${encodeURIComponent(r)}?key=${CFG.KEY}`);
+  const res=await fetchT(`https://sheets.googleapis.com/v4/spreadsheets/${CFG.SID}/values/${encodeURIComponent(r)}?key=${CFG.KEY}`);
   if(!res.ok) throw new Error('Error leyendo '+r);
   return (await res.json()).values||[];
 }
 async function sWrite(r,v){
   const tk=await token();
-  const res=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CFG.SID}/values/${encodeURIComponent(r)}?valueInputOption=RAW`,
+  const res=await fetchT(`https://sheets.googleapis.com/v4/spreadsheets/${CFG.SID}/values/${encodeURIComponent(r)}?valueInputOption=RAW`,
     {method:'PUT',headers:{'Authorization':'Bearer '+tk,'Content-Type':'application/json'},
     body:JSON.stringify({range:r,majorDimension:'ROWS',values:v})});
   if(!res.ok) throw new Error(JSON.stringify(await res.json()));
 }
 async function sAppend(r,v){
   const tk=await token();
-  const res=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CFG.SID}/values/${encodeURIComponent(r)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+  const res=await fetchT(`https://sheets.googleapis.com/v4/spreadsheets/${CFG.SID}/values/${encodeURIComponent(r)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
     {method:'POST',headers:{'Authorization':'Bearer '+tk,'Content-Type':'application/json'},
     body:JSON.stringify({range:r,majorDimension:'ROWS',values:v})});
   if(!res.ok) throw new Error(JSON.stringify(await res.json()));
 }
 async function sClear(r){
   const tk=await token();
-  await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CFG.SID}/values/${encodeURIComponent(r)}:clear`,
+  await fetchT(`https://sheets.googleapis.com/v4/spreadsheets/${CFG.SID}/values/${encodeURIComponent(r)}:clear`,
     {method:'POST',headers:{'Authorization':'Bearer '+tk}});
 }
 
@@ -627,6 +639,10 @@ async function cargarDatos(){
   }catch(e){
     setStatus('error','Error de conexión');
     toast('Error al cargar: '+e.message,'er');
+    if(typeof window.__reintentoProgramado==='undefined' || !window.__reintentoProgramado){
+      window.__reintentoProgramado = true;
+      setTimeout(function(){ window.__reintentoProgramado = false; cargarDatos(); }, 8000);
+    }
   }
 }
 
