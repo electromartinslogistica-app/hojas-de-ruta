@@ -6,529 +6,421 @@
 <title>Hoja de Ruta Directa — Electro Martin's</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-  :root {
-    --azul:       #1a3a2a;
-    --azul-med:   #2a5a3a;
-    --azul-light: #3a7a4a;
-    --acento:     #e8a020;
-    --acento-dark:#c4851a;
-    --bg:         #f0f8f0;
-    --bg-card:    #ffffff;
-    --texto:      #1a3a2a;
-    --texto-sub:  #5a7a6a;
-    --borde:      #c0dcc0;
-    --verde:      #2e7d52;
-    --verde-light:#e8f5ee;
-    --rojo:       #c0392b;
-    --amarillo:   #f39c12;
-    --radio:      8px;
-    --sombra:     0 2px 8px rgba(26,58,42,0.10);
-    --sombra-med: 0 4px 16px rgba(26,58,42,0.15);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--texto); font-size: 14px; min-height: 100vh; }
+:root {
+  --verde:      #1a3a2a;
+  --verde-med:  #2a5a3a;
+  --verde-light:#3a7a4a;
+  --acento:     #e8a020;
+  --acento-d:   #c4851a;
+  --bg:         #f0f8f0;
+  --card:       #ffffff;
+  --texto:      #1a3a2a;
+  --sub:        #5a7a6a;
+  --borde:      #c0dcc0;
+  --gverde:     #2e7d52;
+  --gverde-l:   #e8f5ee;
+  --rojo:       #c0392b;
+  --amarillo:   #f39c12;
+  --r:          8px;
+  --s1:         0 2px 8px rgba(26,58,42,.10);
+  --s2:         0 4px 16px rgba(26,58,42,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--texto);font-size:14px;}
 
-  /* ── HEADER ── */
-  .header {
-    background: var(--azul); color: white; padding: 0 24px;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 56px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    position: sticky; top: 0; z-index: 100;
-  }
-  .header-brand { display: flex; align-items: center; gap: 10px; }
-  .header-brand .bolt { font-size: 22px; }
-  .header-brand h1 { font-size: 17px; font-weight: 700; }
-  .header-brand span { font-size: 12px; color: #8ad0a0; }
-  .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .status-badge {
-    display: flex; align-items: center; gap: 6px; padding: 5px 12px;
-    border-radius: 20px; font-size: 12px; font-weight: 600;
-    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s;
-  }
-  .status-badge.libre   { background: rgba(46,125,82,0.3);  border-color: rgba(46,125,82,0.5); }
-  .status-badge.ocupado { background: rgba(243,156,18,0.3); border-color: rgba(243,156,18,0.5); }
-  .status-badge.error   { background: rgba(192,57,43,0.3);  border-color: rgba(192,57,43,0.5); }
-  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #8ad0a0; }
-  .status-badge.libre   .status-dot { background: #4caf50; box-shadow: 0 0 6px #4caf50; }
-  .status-badge.ocupado .status-dot { background: #f39c12; animation: pulso 1s infinite; }
-  .status-badge.error   .status-dot { background: #e74c3c; }
-  @keyframes pulso { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  .btn-header {
-    background: var(--acento); color: white; border: none; padding: 7px 12px;
-    border-radius: var(--radio); font-size: 12px; font-weight: 600;
-    cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 4px;
-  }
-  .btn-header:hover { background: var(--acento-dark); }
-  .usuario-badge {
-    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 20px; padding: 4px 10px; font-size: 12px; color: #c8f0d8;
-    display: none; align-items: center; gap: 5px;
-  }
+/* HEADER */
+.hdr{background:var(--verde);color:#fff;padding:0 20px;display:flex;align-items:center;
+  justify-content:space-between;height:54px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+.hdr-brand{display:flex;align-items:center;gap:10px;}
+.hdr-brand h1{font-size:16px;font-weight:700;}
+.hdr-brand span{font-size:11px;color:#8ad0a0;}
+.hdr-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.sbadge{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;
+  font-size:11px;font-weight:600;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);}
+.sbadge.libre{background:rgba(46,125,82,.3);border-color:rgba(46,125,82,.5);}
+.sbadge.ocupado{background:rgba(243,156,18,.3);border-color:rgba(243,156,18,.5);}
+.sbadge.error{background:rgba(192,57,43,.3);border-color:rgba(192,57,43,.5);}
+.sdot{width:8px;height:8px;border-radius:50%;background:#8ad0a0;}
+.sbadge.libre .sdot{background:#4caf50;box-shadow:0 0 5px #4caf50;}
+.sbadge.ocupado .sdot{background:#f39c12;animation:pulso 1s infinite;}
+.sbadge.error .sdot{background:#e74c3c;}
+@keyframes pulso{0%,100%{opacity:1}50%{opacity:.4}}
+.ubadge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  border-radius:20px;padding:3px 10px;font-size:11px;color:#c8f0d8;display:none;align-items:center;gap:4px;}
+.btnH{background:var(--acento);color:#fff;border:none;padding:6px 11px;border-radius:var(--r);
+  font-size:11px;font-weight:600;cursor:pointer;transition:background .2s;}
+.btnH:hover{background:var(--acento-d);}
 
-  /* ── TOOLBAR fija ── */
-  .toolbar {
-    background: white; border-bottom: 1px solid var(--borde);
-    padding: 8px 24px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-    position: sticky; top: 56px; z-index: 99; box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  }
-  .resumen-bar {
-    background: var(--azul); color: white;
-    padding: 8px 24px; display: flex; gap: 20px; flex-wrap: wrap;
-    position: sticky; top: 108px; z-index: 98;
-  }
-  .search-box {
-    display: flex; align-items: center; background: var(--bg);
-    border: 1px solid var(--borde); border-radius: var(--radio);
-    padding: 5px 10px; gap: 6px; min-width: 180px; max-width: 240px;
-  }
-  .search-box input { border: none; background: transparent; outline: none; font-size: 13px; color: var(--texto); width: 100%; }
-  .btn {
-    display: flex; align-items: center; gap: 5px; padding: 6px 12px;
-    border-radius: var(--radio); border: none; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; white-space: nowrap;
-  }
-  .btn-primary   { background: var(--azul);   color: white; }
-  .btn-primary:hover   { background: var(--azul-med); }
-  .btn-secondary { background: white; color: var(--azul); border: 1px solid var(--borde); }
-  .btn-secondary:hover { background: var(--bg); }
-  .btn-success   { background: var(--verde);  color: white; }
-  .btn-success:hover   { background: #235f3e; }
-  .btn-warning   { background: var(--acento); color: white; }
-  .btn-warning:hover   { background: var(--acento-dark); }
-  .btn-danger    { background: var(--rojo);   color: white; }
-  .btn-danger:hover    { background: #a93226; }
-  .btn-sm { padding: 4px 10px; font-size: 11px; }
-  .toolbar-sep { width: 1px; height: 26px; background: var(--borde); }
-  .spacer { flex: 1; }
+/* TOOLBAR */
+.tlb{background:#fff;border-bottom:1px solid var(--borde);padding:7px 20px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  position:sticky;top:54px;z-index:99;box-shadow:0 2px 5px rgba(0,0,0,.05);}
+.srch{display:flex;align-items:center;background:var(--bg);border:1px solid var(--borde);
+  border-radius:var(--r);padding:5px 10px;gap:6px;min-width:170px;max-width:230px;}
+.srch input{border:none;background:transparent;outline:none;font-size:13px;color:var(--texto);width:100%;}
+.btn{display:flex;align-items:center;gap:5px;padding:6px 11px;border-radius:var(--r);
+  border:none;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s;white-space:nowrap;}
+.btn-p{background:var(--verde);color:#fff;} .btn-p:hover{background:var(--verde-med);}
+.btn-s{background:#fff;color:var(--verde);border:1px solid var(--borde);} .btn-s:hover{background:var(--bg);}
+.btn-g{background:var(--gverde);color:#fff;} .btn-g:hover{background:#235f3e;}
+.btn-w{background:var(--acento);color:#fff;} .btn-w:hover{background:var(--acento-d);}
+.btn-d{background:var(--rojo);color:#fff;}  .btn-d:hover{background:#a93226;}
+.btn-sm{padding:3px 8px;font-size:11px;}
+.sep{width:1px;height:24px;background:var(--borde);}
+.spc{flex:1;}
 
-  /* ── RESUMEN ── */
-  .resumen-item { display: flex; align-items: baseline; gap: 5px; }
-  .resumen-item .num { font-size: 20px; font-weight: 700; color: var(--acento); }
-  .resumen-item .lbl { font-size: 11px; color: #8ad0a0; text-transform: uppercase; letter-spacing: 0.4px; }
+/* RESUMEN */
+.res{background:var(--verde);color:#fff;padding:7px 20px;display:flex;gap:18px;flex-wrap:wrap;
+  position:sticky;top:102px;z-index:98;}
+.ri{display:flex;align-items:baseline;gap:5px;}
+.ri .n{font-size:19px;font-weight:700;color:var(--acento);}
+.ri .l{font-size:10px;color:#8ad0a0;text-transform:uppercase;letter-spacing:.4px;}
 
-  /* ── MAIN ── */
-  .main { padding: 16px 24px; max-width: 1100px; margin: 0 auto; }
+/* MAIN */
+.main{padding:14px 20px;max-width:1100px;margin:0 auto;}
 
-  /* ── CARD ZONA ── */
-  .zona-card {
-    background: var(--bg-card); border: 1px solid var(--borde);
-    border-radius: 10px; margin-bottom: 14px; box-shadow: var(--sombra); overflow: hidden;
-  }
-  .zona-header {
-    background: var(--azul-med); color: white; padding: 9px 14px;
-    display: flex; align-items: center; gap: 10px; user-select: none;
-  }
-  .zona-nombre { font-size: 14px; font-weight: 700; flex: 1; }
-  .zona-chofer-wrap { display: flex; align-items: center; gap: 6px; }
-  .zona-chofer-wrap label { font-size: 11px; color: #8ad0a0; white-space: nowrap; }
-  .zona-chofer {
-    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 5px; color: white; padding: 3px 8px; font-size: 12px; width: 130px; outline: none;
-  }
-  .zona-chofer::placeholder { color: rgba(255,255,255,0.5); }
-  .zona-chofer:focus { border-color: var(--acento); }
-  .zona-resumen { display: flex; gap: 14px; align-items: center; font-size: 12px; color: #8ad0a0; }
-  .zona-resumen strong { color: var(--acento); font-size: 13px; }
-  .zona-chevron { transition: transform 0.2s; font-size: 11px; color: #8ad0a0; cursor: pointer; }
-  .zona-card.collapsed .zona-chevron { transform: rotate(-90deg); }
-  .zona-body { padding: 0; }
-  .zona-card.collapsed .zona-body { display: none; }
+/* ZONA CARD */
+.zcard{background:var(--card);border:1px solid var(--borde);border-radius:10px;
+  margin-bottom:12px;box-shadow:var(--s1);overflow:hidden;}
+.zhdr{background:var(--verde-med);color:#fff;padding:8px 14px;
+  display:flex;align-items:center;gap:8px;user-select:none;}
+.znombre{font-size:13px;font-weight:700;flex:1;}
+.zchofer-wrap{display:flex;align-items:center;gap:5px;}
+.zchofer-wrap label{font-size:10px;color:#8ad0a0;white-space:nowrap;}
+.zchofer{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  border-radius:4px;color:#fff;padding:2px 7px;font-size:11px;width:120px;outline:none;}
+.zchofer::placeholder{color:rgba(255,255,255,.5);}
+.zchofer:focus{border-color:var(--acento);}
+.zres{display:flex;gap:12px;align-items:center;font-size:11px;color:#8ad0a0;}
+.zres strong{color:var(--acento);font-size:12px;}
+.zbtns{display:flex;gap:5px;align-items:center;}
+.zbtn-imp{background:rgba(232,160,32,.25);border:1px solid rgba(232,160,32,.4);
+  color:#fff;font-size:10px;padding:2px 7px;border-radius:4px;cursor:pointer;transition:all .2s;}
+.zbtn-imp:hover{background:rgba(232,160,32,.5);}
+.zbtn-rst{background:rgba(192,57,43,.25);border:1px solid rgba(192,57,43,.4);
+  color:#fff;font-size:10px;padding:2px 7px;border-radius:4px;cursor:pointer;transition:all .2s;}
+.zbtn-rst:hover{background:rgba(192,57,43,.5);}
+.zchev{font-size:10px;color:#8ad0a0;cursor:pointer;transition:transform .2s;}
+.zcard.col .zchev{transform:rotate(-90deg);}
+.zbody{padding:0;}
+.zcard.col .zbody{display:none;}
 
-  /* Botones zona header */
-  .zona-btns { display: flex; gap: 6px; align-items: center; }
-  .btn-zona-reset {
-    background: rgba(192,57,43,0.25); border: 1px solid rgba(192,57,43,0.4);
-    color: white; font-size: 11px; padding: 3px 8px; border-radius: 5px;
-    cursor: pointer; transition: all 0.2s; white-space: nowrap;
-  }
-  .btn-zona-reset:hover { background: rgba(192,57,43,0.5); }
-  .btn-zona-imprimir {
-    background: rgba(232,160,32,0.25); border: 1px solid rgba(232,160,32,0.4);
-    color: white; font-size: 11px; padding: 3px 8px; border-radius: 5px;
-    cursor: pointer; transition: all 0.2s; white-space: nowrap;
-  }
-  .btn-zona-imprimir:hover { background: rgba(232,160,32,0.5); }
+/* TABLA */
+.tbl{width:100%;border-collapse:collapse;table-layout:fixed;}
+.col-ord{width:36px;} .col-nro{width:80px;} .col-nom{width:auto;}
+.col-bul{width:76px;} .col-com{width:190px;}
+.col-usr{width:85px;} .col-acc{width:34px;} .col-chk{width:26px;}
+.tbl th{background:#f0f8f0;color:var(--sub);font-size:10px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.4px;padding:6px 9px;
+  text-align:left;border-bottom:1px solid var(--borde);}
+.tbl td{padding:5px 9px;border-bottom:1px solid #e8f0e8;vertical-align:middle;overflow:hidden;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:#f0f8f0;}
+.tbl tr.hi td{background:#fffbf0;}
+.tbl tr.cp td{background:#f0f8ff;}
+.tbl tr.cp:hover td{background:#e8f4ff;}
+.cord{font-size:11px;color:var(--sub);text-align:center;}
+.cnro{font-size:11px;color:var(--sub);font-family:monospace;}
+.cnom{font-weight:600;color:var(--texto);}
+.pbadge{display:inline-block;background:#dbeafe;color:#1e40af;
+  font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;margin-left:4px;}
+.ibul{width:60px;padding:4px 6px;border:1px solid var(--borde);border-radius:4px;
+  font-size:13px;font-weight:600;text-align:center;color:var(--texto);outline:none;}
+.ibul:focus{border-color:var(--verde-light);box-shadow:0 0 0 2px rgba(58,122,74,.15);}
+.ibul.on{border-color:var(--gverde);background:var(--gverde-l);color:var(--gverde);}
+.icom{width:100%;padding:4px 6px;border:1px solid transparent;border-radius:4px;
+  font-size:11px;color:var(--texto);outline:none;background:transparent;}
+.icom:focus{border-color:var(--verde-light);background:#fff;}
+.icom.on{color:#7a5f00;}
+.cusr{font-size:10px;color:var(--sub);font-style:italic;}
+.bedit{background:none;border:none;cursor:pointer;color:var(--sub);
+  font-size:12px;padding:2px 4px;border-radius:3px;}
+.bedit:hover{background:var(--bg);color:var(--verde);}
+.zfoot{background:#f0f8f0;border-top:1px solid var(--borde);padding:6px 14px;
+  display:flex;justify-content:space-between;align-items:center;}
+.badd{background:none;border:1px dashed var(--borde);color:var(--verde-light);
+  font-size:11px;padding:3px 9px;border-radius:4px;cursor:pointer;transition:all .2s;}
+.badd:hover{border-color:var(--verde);color:var(--verde);background:var(--bg);}
 
-  /* ── TABLA ── */
-  .tabla-clientes { width: 100%; border-collapse: collapse; table-layout: fixed; }
-  .col-orden   { width: 40px; }
-  .col-nro     { width: 85px; }
-  .col-nombre  { width: auto; }
-  .col-bultos  { width: 80px; }
-  .col-coment  { width: 200px; }
-  .col-usuario { width: 90px; }
-  .col-acciones{ width: 36px; }
-  .col-check   { width: 28px; }
+/* MODALES */
+.moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+  z-index:200;align-items:center;justify-content:center;}
+.moverlay.open{display:flex;}
+.modal{background:#fff;border-radius:12px;padding:22px;width:100%;max-width:400px;
+  box-shadow:0 8px 32px rgba(0,0,0,.2);animation:sup .2s ease;}
+@keyframes sup{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal h3{font-size:15px;font-weight:700;color:var(--verde);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.fg{margin-bottom:12px;}
+.fg label{display:block;font-size:11px;font-weight:600;color:var(--sub);margin-bottom:4px;text-transform:uppercase;}
+.fg input,.fg select{width:100%;padding:7px 10px;border:1px solid var(--borde);
+  border-radius:var(--r);font-size:13px;color:var(--texto);outline:none;}
+.fg input:focus,.fg select:focus{border-color:var(--verde-light);}
+.mbtns{display:flex;gap:7px;justify-content:flex-end;margin-top:16px;}
+.m-ini{max-width:340px;text-align:center;}
+.m-ini .ico{font-size:44px;margin-bottom:10px;}
+.m-ini h3{justify-content:center;font-size:17px;}
+.m-ini p{font-size:12px;color:var(--sub);margin-bottom:14px;}
+.aviso{background:#fff8e1;border:1px solid #f39c12;border-radius:7px;
+  padding:10px;margin-bottom:14px;font-size:12px;color:#7a5f00;}
+.gitem{display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--borde);}
+.gitem:last-child{border-bottom:none;}
+.gitem input{flex:1;padding:4px 7px;border:1px solid var(--borde);border-radius:4px;font-size:12px;outline:none;}
 
-  .tabla-clientes th {
-    background: #f0f8f0; color: var(--texto-sub); font-size: 11px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.4px; padding: 7px 10px;
-    text-align: left; border-bottom: 1px solid var(--borde);
-  }
-  .tabla-clientes td { padding: 6px 10px; border-bottom: 1px solid #e8f0e8; vertical-align: middle; overflow: hidden; }
-  .tabla-clientes tr:last-child td { border-bottom: none; }
-  .tabla-clientes tr:hover td { background: #f0f8f0; }
-  .tabla-clientes tr.highlight td { background: #fffbf0; }
-  .tabla-clientes tr.con-pedido td { background: #f0f8ff; }
-  .tabla-clientes tr.con-pedido:hover td { background: #e8f4ff; }
+/* PANEL */
+.panel{display:none;position:fixed;inset:0;background:var(--verde);z-index:500;overflow-y:auto;padding:18px;}
+.panel.open{display:block;}
+.phdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;gap:8px;}
+.phdr h2{color:#fff;font-size:17px;}
+.phdr .pf{color:#8ad0a0;font-size:11px;margin-top:2px;}
+.ptots{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.ptcard{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  border-radius:9px;padding:12px 16px;flex:1;min-width:110px;}
+.ptcard .n{font-size:26px;font-weight:700;color:var(--acento);}
+.ptcard .l{font-size:10px;color:#8ad0a0;text-transform:uppercase;}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:9px;}
+.pzcard{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:9px;padding:11px 13px;}
+.pzcard h4{color:#fff;font-size:12px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:baseline;}
+.pzcard h4 span{color:var(--acento);font-size:16px;font-weight:700;}
+.prow{display:flex;justify-content:space-between;padding:3px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);font-size:11px;}
+.prow:last-child{border-bottom:none;}
+.prow .pn{color:#c8f0d8;flex:1;padding-right:7px;}
+.prow .pb{color:var(--acento);font-weight:700;}
+@media(max-width:580px){
+  .panel{padding:12px;}
+  .phdr h2{font-size:14px;}
+  .ptcard{padding:8px 10px;min-width:85px;}
+  .ptcard .n{font-size:20px;}
+  .pgrid{grid-template-columns:1fr;}
+}
 
-  .cliente-orden  { font-size: 11px; color: var(--texto-sub); text-align: center; }
-  .cliente-nro    { font-size: 12px; color: var(--texto-sub); font-family: monospace; }
-  .cliente-nombre { font-weight: 600; color: var(--texto); }
-  .pedido-badge {
-    display: inline-block; background: #dbeafe; color: #1e40af;
-    font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 10px; margin-left: 5px;
-  }
-  .input-bultos {
-    width: 64px; padding: 4px 6px; border: 1px solid var(--borde);
-    border-radius: 5px; font-size: 14px; font-weight: 600;
-    text-align: center; color: var(--texto); outline: none; transition: border-color 0.2s;
-  }
-  .input-bultos:focus { border-color: var(--azul-light); box-shadow: 0 0 0 2px rgba(58,122,74,0.15); }
-  .input-bultos.tiene-valor { border-color: var(--verde); background: var(--verde-light); color: var(--verde); }
-  .input-comentario {
-    width: 100%; padding: 4px 6px; border: 1px solid transparent;
-    border-radius: 5px; font-size: 12px; color: var(--texto); outline: none; background: transparent;
-  }
-  .input-comentario:focus { border-color: var(--azul-light); background: white; }
-  .input-comentario.tiene-valor { color: #7a5f00; }
-  .usuario-col-td { font-size: 11px; color: var(--texto-sub); font-style: italic; }
-  .btn-edit-cliente {
-    background: none; border: none; cursor: pointer; color: var(--texto-sub);
-    font-size: 13px; padding: 2px 5px; border-radius: 4px; transition: all 0.2s;
-  }
-  .btn-edit-cliente:hover { background: var(--bg); color: var(--azul); }
+/* TOAST */
+.tc{position:fixed;bottom:18px;right:18px;z-index:300;display:flex;flex-direction:column;gap:7px;}
+.toast{background:var(--verde);color:#fff;padding:9px 13px;border-radius:var(--r);
+  font-size:12px;box-shadow:var(--s2);animation:fup .3s ease;display:flex;align-items:center;gap:7px;max-width:300px;}
+.toast.ok{background:var(--gverde);}
+.toast.er{background:var(--rojo);}
+.toast.wa{background:var(--amarillo);color:var(--verde);}
+@keyframes fup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-  .zona-footer {
-    background: #f0f8f0; border-top: 1px solid var(--borde);
-    padding: 7px 14px; display: flex; justify-content: space-between; align-items: center;
-  }
-  .btn-add-cliente {
-    background: none; border: 1px dashed var(--borde); color: var(--azul-light);
-    font-size: 12px; padding: 3px 10px; border-radius: 5px; cursor: pointer;
-    transition: all 0.2s; display: flex; align-items: center; gap: 4px;
-  }
-  .btn-add-cliente:hover { border-color: var(--azul); color: var(--azul); background: var(--bg); }
+/* LOADING */
+.loverlay{display:none;position:fixed;inset:0;background:rgba(26,58,42,.7);
+  z-index:400;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:#fff;}
+.loverlay.open{display:flex;}
+.spin{width:36px;height:36px;border:3px solid rgba(255,255,255,.3);
+  border-top-color:var(--acento);border-radius:50%;animation:sp .8s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg)}}
 
-  /* ── MODALES ── */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: white; border-radius: 12px; padding: 24px; width: 100%; max-width: 420px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2); animation: slideUp 0.2s ease;
-  }
-  @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
-  .modal h3 { font-size: 16px; font-weight: 700; color: var(--azul); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-  .form-group { margin-bottom: 14px; }
-  .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--texto-sub); margin-bottom: 5px; text-transform: uppercase; }
-  .form-group input, .form-group select {
-    width: 100%; padding: 8px 12px; border: 1px solid var(--borde);
-    border-radius: var(--radio); font-size: 14px; color: var(--texto); outline: none;
-  }
-  .form-group input:focus, .form-group select:focus { border-color: var(--azul-light); }
-  .modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
-  .modal-inicio { max-width: 360px; text-align: center; }
-  .modal-inicio .ico-grande { font-size: 48px; margin-bottom: 12px; }
-  .modal-inicio h3 { justify-content: center; font-size: 18px; }
-  .modal-inicio p { font-size: 13px; color: var(--texto-sub); margin-bottom: 16px; }
-  .modal-confirm .aviso {
-    background: #fff8e1; border: 1px solid #f39c12; border-radius: 8px;
-    padding: 12px; margin-bottom: 16px; font-size: 13px; color: #7a5f00;
-  }
+/* NORES */
+.nores{text-align:center;padding:36px;color:var(--sub);}
+.nores .ico{font-size:36px;margin-bottom:8px;}
 
-  /* ── TOAST ── */
-  .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
-  .toast {
-    background: var(--azul); color: white; padding: 10px 14px;
-    border-radius: var(--radio); font-size: 13px; box-shadow: var(--sombra-med);
-    animation: fadeInUp 0.3s ease; display: flex; align-items: center; gap: 8px; max-width: 320px;
-  }
-  .toast.success { background: var(--verde); }
-  .toast.error   { background: var(--rojo); }
-  .toast.warning { background: var(--amarillo); color: var(--azul); }
-  @keyframes fadeInUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-
-  /* ── LOADING ── */
-  .loading-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(26,58,42,0.7);
-    z-index: 400; align-items: center; justify-content: center; flex-direction: column; gap: 14px; color: white;
-  }
-  .loading-overlay.open { display: flex; }
-  .spinner { width: 38px; height: 38px; border: 3px solid rgba(255,255,255,0.3); border-top-color: var(--acento); border-radius: 50%; animation: spin 0.8s linear infinite; }
-  @keyframes spin { to{transform:rotate(360deg)} }
-
-  /* ── PANEL CONSULTA ── */
-  .panel-consulta { display: none; position: fixed; inset: 0; background: var(--azul); z-index: 500; overflow-y: auto; padding: 20px; }
-  .panel-consulta.open { display: block; }
-  .panel-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; gap: 10px; }
-  .panel-header h2 { color: white; font-size: 18px; }
-  .panel-header .fecha { color: #8ad0a0; font-size: 12px; margin-top: 2px; }
-  .panel-totales { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-  .panel-total-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 14px 18px; flex: 1; min-width: 120px; }
-  .panel-total-card .num { font-size: 28px; font-weight: 700; color: var(--acento); }
-  .panel-total-card .lbl { font-size: 11px; color: #8ad0a0; text-transform: uppercase; }
-  .panel-zonas { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 10px; }
-  .panel-zona-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 14px; }
-  .panel-zona-card h4 { color: white; font-size: 13px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: baseline; }
-  .panel-zona-card h4 span { color: var(--acento); font-size: 17px; font-weight: 700; }
-  .panel-cliente-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 12px; }
-  .panel-cliente-row:last-child { border-bottom: none; }
-  .panel-cliente-row .pnombre { color: #c8f0d8; flex: 1; padding-right: 8px; }
-  .panel-cliente-row .pbultos { color: var(--acento); font-weight: 700; white-space: nowrap; }
-  @media (max-width: 600px) {
-    .panel-consulta { padding: 14px; }
-    .panel-header h2 { font-size: 15px; }
-    .panel-total-card { padding: 10px 12px; min-width: 90px; }
-    .panel-total-card .num { font-size: 22px; }
-    .panel-zonas { grid-template-columns: 1fr; }
-  }
-
-  /* ── NO RESULTADOS ── */
-  .no-resultados { text-align: center; padding: 40px; color: var(--texto-sub); }
-  .no-resultados .ico { font-size: 40px; margin-bottom: 10px; }
-
-  /* ── PRINT ── */
-  .print-header { display: none; }
-  @media print {
-    body { background: white; font-size: 10.5px; }
-    .header, .toolbar, .resumen-bar, .no-print,
-    .toast-container, .loading-overlay, .modal-overlay,
-    .panel-consulta, .btn, .btn-add-cliente, .btn-edit-cliente,
-    .btn-zona-reset, .btn-zona-imprimir { display: none !important; }
-    .main { padding: 0; max-width: 100%; }
-
-    /* Solo la zona seleccionada */
-    .zona-card { display: none; }
-    .zona-card.imprimiendo { display: block !important; box-shadow: none; margin-bottom: 0; border: 1px solid #aaa; page-break-after: always; }
-    .zona-card.imprimiendo .zona-body { display: block !important; }
-
-    .zona-header {
-      background: white !important; color: black !important;
-      border-bottom: 2px solid #222; padding: 5px 10px;
-      -webkit-print-color-adjust: exact; print-color-adjust: exact;
-    }
-    .zona-nombre { color: black !important; font-size: 13px; font-weight: 700; }
-    .zona-resumen { color: #333 !important; }
-    .zona-resumen strong { color: #333 !important; }
-    .zona-chevron, .zona-btns { display: none !important; }
-    .zona-chofer-wrap label { color: #555 !important; }
-    .zona-chofer { background: transparent !important; color: black !important; border: none !important; font-weight: 700; }
-
-    .tabla-clientes tr.sin-bultos { display: none !important; }
-    .tabla-clientes tr.con-pedido:not(.highlight) { display: none !important; }
-    .tabla-clientes { table-layout: fixed; width: 100%; border-collapse: collapse; }
-    .col-orden   { width: 30px; }
-    .col-nro     { width: 70px; }
-    .col-nombre  { width: auto; }
-    .col-bultos  { width: 50px; }
-    .col-coment  { width: 180px; }
-    .col-usuario { display: none; }
-    .col-acciones{ display: none; }
-    .col-check   { width: 22px; }
-    .tabla-clientes th { background: #ebebeb !important; color: #333 !important; padding: 4px 8px; font-size: 9px; border-bottom: 1px solid #999; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .tabla-clientes td { padding: 4px 8px; border-bottom: 1px solid #ddd; }
-    .tabla-clientes tr.highlight td { background: white !important; }
-    .cliente-orden { font-weight: 700 !important; color: black !important; }
-    .cliente-nro   { font-weight: 700 !important; color: black !important; font-size: 10.5px; }
-    .input-bultos  { border: none !important; background: transparent !important; font-weight: 700 !important; color: black !important; font-size: 11px; width: auto; padding: 0; text-align: left; }
-    .input-comentario { border: none !important; background: transparent !important; color: #444; font-size: 10px; width: 100%; padding: 0; }
-    .check-print { width: 14px; height: 14px; border: 1.5px solid #555; display: inline-block; }
-    .pedido-badge { display: none; }
-    .usuario-col-td { display: none; }
-    .zona-footer { display: none; }
-
-    .print-header { display: block !important; margin-bottom: 12px; border-bottom: 2px solid #333; padding-bottom: 7px; }
-    .print-header-top { display: flex; justify-content: space-between; align-items: flex-start; }
-    .print-header h2 { font-size: 14px; font-weight: 700; }
-    .ph-right { text-align: right; }
-    .ph-fecha  { font-size: 10px; }
-    .ph-zona   { font-size: 12px; font-weight: 700; margin-top: 2px; }
-    .ph-chofer { font-size: 11px; margin-top: 2px; }
-    .ph-totales { font-size: 10px; color: #444; margin-top: 5px; }
-  }
+/* PRINT */
+.phead{display:none;}
+@media print{
+  body{background:#fff;font-size:10px;}
+  .hdr,.tlb,.res,.no-print,.tc,.loverlay,.moverlay,.panel,.btn,.badd,.bedit,
+  .zbtn-imp,.zbtn-rst,.zbtns{display:none!important;}
+  .main{padding:0;max-width:100%;}
+  .zcard{display:none;}
+  .zcard.printing{display:block!important;box-shadow:none;margin-bottom:0;border:1px solid #aaa;page-break-after:always;}
+  .zcard.printing .zbody{display:block!important;}
+  .zhdr{background:#fff!important;color:#000!important;border-bottom:2px solid #222;padding:4px 9px;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .znombre{color:#000!important;font-size:12px;font-weight:700;}
+  .zres{color:#333!important;} .zres strong{color:#333!important;}
+  .zchev{display:none;}
+  .zchofer-wrap label{color:#555!important;}
+  .zchofer{background:transparent!important;color:#000!important;border:none!important;font-weight:700;}
+  .tbl tr.sb{display:none!important;}
+  .tbl tr.cp:not(.hi){display:none!important;}
+  .tbl{table-layout:fixed;width:100%;border-collapse:collapse;}
+  .col-ord{width:28px;} .col-nro{width:65px;} .col-bul{width:46px;}
+  .col-com{width:170px;} .col-usr{display:none;} .col-acc{display:none;} .col-chk{width:20px;}
+  .tbl th{background:#ebebeb!important;color:#333!important;padding:3px 7px;font-size:9px;
+    border-bottom:1px solid #999;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .tbl td{padding:3px 7px;border-bottom:1px solid #ddd;}
+  .tbl tr.hi td{background:#fff!important;}
+  .cord{font-weight:700!important;color:#000!important;}
+  .cnro{font-weight:700!important;color:#000!important;font-size:10px;}
+  .ibul{border:none!important;background:transparent!important;font-weight:700!important;
+    color:#000!important;font-size:10px;width:auto;padding:0;text-align:left;}
+  .icom{border:none!important;background:transparent!important;color:#444;font-size:9px;width:100%;padding:0;}
+  .pbadge{display:none;} .cusr{display:none;}
+  .zfoot{display:none;}
+  .phead{display:block!important;margin-bottom:10px;border-bottom:2px solid #333;padding-bottom:6px;}
+  .ph-top{display:flex;justify-content:space-between;align-items:flex-start;}
+  .ph-top h2{font-size:13px;font-weight:700;}
+  .ph-r{text-align:right;}
+  .ph-fecha{font-size:9px;} .ph-zona{font-size:11px;font-weight:700;margin-top:1px;}
+  .ph-chofer{font-size:10px;margin-top:1px;} .ph-tots{font-size:9px;color:#444;margin-top:4px;}
+  .chk{width:13px;height:13px;border:1.5px solid #555;display:inline-block;}
+}
 </style>
 </head>
 <body>
 
 <!-- PRINT HEADER -->
-<div class="print-header" id="printHeader">
-  <div class="print-header-top">
+<div class="phead" id="phead">
+  <div class="ph-top">
     <h2>⚡ Electro Martin's — Hoja de Ruta Directa</h2>
-    <div class="ph-right">
-      <div class="ph-fecha"  id="printFecha"></div>
-      <div class="ph-zona"   id="printZona"></div>
-      <div class="ph-chofer" id="printChofer"></div>
+    <div class="ph-r">
+      <div class="ph-fecha" id="ph-fecha"></div>
+      <div class="ph-zona"  id="ph-zona"></div>
+      <div class="ph-chofer" id="ph-chofer"></div>
     </div>
   </div>
-  <div class="ph-totales" id="printTotales"></div>
+  <div class="ph-tots" id="ph-tots"></div>
 </div>
 
 <!-- HEADER -->
-<header class="header">
-  <div class="header-brand">
-    <span class="bolt">🚚</span>
+<header class="hdr">
+  <div class="hdr-brand">
+    <span style="font-size:20px">🚚</span>
     <div><h1>Electro Martin's</h1><span>Hoja de Ruta Directa</span></div>
   </div>
-  <div class="header-right">
-    <div class="status-badge" id="statusBadge">
-      <div class="status-dot"></div>
-      <span id="statusText">Conectando...</span>
-    </div>
-    <div class="usuario-badge" id="usuarioBadge">👤 <span id="usuarioNombre"></span></div>
-    <button class="btn-header no-print" onclick="abrirPanel()">👁 Panel</button>
-    <button class="btn-header no-print" onclick="exportarExcel()">📊 Exportar Excel</button>
+  <div class="hdr-right">
+    <div class="sbadge" id="sbadge"><div class="sdot"></div><span id="stxt">Conectando...</span></div>
+    <div class="ubadge" id="ubadge">👤 <span id="unombre"></span></div>
+    <button class="btnH no-print" onclick="abrirPanel()">👁 Panel</button>
+    <button class="btnH no-print" onclick="exportarExcel()">📊 Excel</button>
+    <button class="btnH no-print" onclick="imprimirTodo()">🖨 Imprimir</button>
   </div>
 </header>
 
 <!-- TOOLBAR -->
-<div class="toolbar no-print">
-  <div class="search-box">
-    <span>🔍</span>
-    <input type="text" id="busqueda" placeholder="Buscar nombre o N° cliente..." oninput="filtrar()">
-  </div>
-  <div class="toolbar-sep"></div>
-  <button class="btn btn-success"   onclick="abrirModalCliente()">＋ Cliente</button>
-  <button class="btn btn-secondary" onclick="abrirGestorZona()">⚙ Zonas</button>
-  <label  class="btn btn-secondary" style="cursor:pointer">
+<div class="tlb no-print">
+  <div class="srch"><span>🔍</span><input type="text" id="busqueda" placeholder="Buscar cliente..." oninput="filtrar()"></div>
+  <div class="sep"></div>
+  <button class="btn btn-g" onclick="abrirModalCliente()">＋ Cliente</button>
+  <button class="btn btn-s" onclick="abrirGestorZona()">⚙ Zonas</button>
+  <label class="btn btn-s" style="cursor:pointer">
     📂 Cargar pedidos
-    <input type="file" id="inputExcel" accept=".xlsx,.xls" style="display:none" multiple onchange="cargarExcel(this)">
+    <input type="file" id="inputXls" accept=".xlsx,.xls" style="display:none" multiple onchange="cargarExcel(this)">
   </label>
-  <div class="spacer"></div>
-  <button class="btn btn-secondary" onclick="cargarDatos()">↻ Actualizar</button>
-  <button class="btn btn-danger no-print" onclick="pedirResetTotalDirecta()">🗑 Resetear todo</button>
+  <div class="spc"></div>
+  <button class="btn btn-d" onclick="pedirResetTotal()">🗑 Resetear todo</button>
+  <button class="btn btn-s" onclick="cargarDatos()">↻ Actualizar</button>
 </div>
 
 <!-- RESUMEN -->
-<div class="resumen-bar no-print">
-  <div class="resumen-item"><span class="num" id="rTotalBultos">0</span><span class="lbl">bultos totales</span></div>
-  <div class="resumen-item"><span class="num" id="rTotalPedidos">0</span><span class="lbl">pedidos</span></div>
-  <div class="resumen-item"><span class="num" id="rTotalZonas">0</span><span class="lbl">zonas activas</span></div>
-  <div class="resumen-item" id="resumenPendientes" style="display:none">
-    <span class="num" id="rPendientes" style="color:#f39c12">0</span><span class="lbl">pendientes sin bultos</span>
-  </div>
+<div class="res no-print">
+  <div class="ri"><span class="n" id="rBultos">0</span><span class="l">bultos totales</span></div>
+  <div class="ri"><span class="n" id="rPedidos">0</span><span class="l">pedidos</span></div>
+  <div class="ri"><span class="n" id="rZonas">0</span><span class="l">zonas activas</span></div>
+  <div class="ri" id="rPendDiv" style="display:none"><span class="n" id="rPend" style="color:#f39c12">0</span><span class="l">pendientes</span></div>
 </div>
 
 <!-- MAIN -->
-<main class="main" id="mainContent">
-  <div class="no-resultados"><div class="ico">⏳</div><p>Cargando datos...</p></div>
-</main>
+<main class="main" id="main"><div class="nores"><div class="ico">⏳</div><p>Cargando...</p></div></main>
 
 <!-- MODAL USUARIO -->
-<div class="modal-overlay open" id="modalUsuario">
-  <div class="modal modal-inicio">
-    <div class="ico-grande">🚚</div>
+<div class="moverlay open" id="mUsuario">
+  <div class="modal m-ini">
+    <div class="ico">🚚</div>
     <h3>Hoja de Ruta Directa</h3>
-    <p>Ingresá tu nombre para identificar tus registros.</p>
-    <div class="form-group">
-      <input type="text" id="fUsuario" placeholder="Tu nombre..." maxlength="30"
-        onkeydown="if(event.key==='Enter') confirmarUsuario()">
-    </div>
-    <div class="modal-btns" style="justify-content:center">
-      <button class="btn btn-primary" onclick="confirmarUsuario()" style="padding:10px 32px">Ingresar</button>
+    <p>Ingresá tu nombre para continuar.</p>
+    <div class="fg"><input type="text" id="fUsuario" placeholder="Tu nombre..." maxlength="30"
+      onkeydown="if(event.key==='Enter')confirmarUsuario()"></div>
+    <div class="mbtns" style="justify-content:center">
+      <button class="btn btn-p" onclick="confirmarUsuario()" style="padding:9px 28px">Ingresar</button>
     </div>
   </div>
 </div>
 
 <!-- MODAL RESET TOTAL -->
-<div class="modal-overlay" id="modalResetTotal">
-  <div class="modal modal-confirm">
+<div class="moverlay" id="mResetTotal">
+  <div class="modal">
     <h3>🗑 Resetear hoja completa</h3>
-    <div class="aviso">¿Querés borrar todos los bultos, comentarios y pedidos de todas las zonas? Esta acción no se puede deshacer.</div>
-    <div class="modal-btns">
-      <button class="btn btn-secondary" onclick="cerrarModal('modalResetTotal')">Cancelar</button>
-      <button class="btn btn-danger"    onclick="confirmarResetTotalDirecta()">Sí, resetear todo</button>
+    <div class="aviso">¿Borrar todos los bultos, comentarios y pedidos de todas las zonas? No se puede deshacer.</div>
+    <div class="mbtns">
+      <button class="btn btn-s" onclick="cerrarModal('mResetTotal')">Cancelar</button>
+      <button class="btn btn-d" onclick="confirmarResetTotal()">Sí, resetear todo</button>
     </div>
   </div>
 </div>
 
 <!-- MODAL RESET ZONA -->
-<div class="modal-overlay" id="modalResetZona">
-  <div class="modal modal-confirm">
+<div class="moverlay" id="mResetZona">
+  <div class="modal">
     <h3>🗑 Limpiar zona</h3>
-    <div class="aviso" id="modalResetZonaTexto"></div>
-    <div class="modal-btns">
-      <button class="btn btn-secondary" onclick="cerrarModal('modalResetZona')">Cancelar</button>
-      <button class="btn btn-danger"    onclick="confirmarResetZona()">Sí, limpiar</button>
+    <div class="aviso" id="mResetZonaTxt"></div>
+    <div class="mbtns">
+      <button class="btn btn-s" onclick="cerrarModal('mResetZona')">Cancelar</button>
+      <button class="btn btn-d" onclick="confirmarResetZona()">Sí, limpiar</button>
     </div>
   </div>
 </div>
 
 <!-- MODAL CLIENTE NUEVO -->
-<div class="modal-overlay" id="modalCliente">
+<div class="moverlay" id="mCliente">
   <div class="modal">
-    <h3>👤 Agregar cliente nuevo</h3>
-    <div class="form-group"><label>N° Cliente</label><input type="text" id="fNroCliente" placeholder="ej: 1001"></div>
-    <div class="form-group"><label>Nombre</label><input type="text" id="fNombreCliente" placeholder="ej: García Juan"></div>
-    <div class="form-group"><label>Zona</label><select id="fZonaCliente"></select></div>
-    <div class="form-group">
-      <label>Insertar después de</label>
-      <select id="fDespuesDe">
-        <option value="0">— Al principio de la zona —</option>
-      </select>
-    </div>
-    <div class="modal-btns">
-      <button class="btn btn-secondary" onclick="cerrarModal('modalCliente')">Cancelar</button>
-      <button class="btn btn-success"   onclick="guardarCliente()">Guardar</button>
+    <h3>👤 Agregar cliente</h3>
+    <div class="fg"><label>N° Cliente</label><input type="text" id="fNro" placeholder="ej: 1001"></div>
+    <div class="fg"><label>Nombre</label><input type="text" id="fNom" placeholder="ej: García Juan"></div>
+    <div class="fg"><label>Zona</label><select id="fZona"></select></div>
+    <div class="fg"><label>Insertar después de</label><select id="fDespues"><option value="0">— Al principio —</option></select></div>
+    <div class="mbtns">
+      <button class="btn btn-s" onclick="cerrarModal('mCliente')">Cancelar</button>
+      <button class="btn btn-g" onclick="guardarCliente()">Guardar</button>
     </div>
   </div>
 </div>
 
 <!-- MODAL EDITAR CLIENTE -->
-<div class="modal-overlay" id="modalEditarCliente">
+<div class="moverlay" id="mEditCliente">
   <div class="modal">
     <h3>✏️ Editar cliente</h3>
-    <input type="hidden" id="eRowIndex">
-    <input type="hidden" id="eOrdenOriginal">
-    <div class="form-group"><label>N° Cliente</label><input type="text" id="eNroCliente"></div>
-    <div class="form-group"><label>Nombre</label><input type="text" id="eNombreCliente"></div>
-    <div class="form-group"><label>Zona</label><select id="eZonaCliente"></select></div>
-    <div class="modal-btns">
-      <button class="btn btn-secondary" onclick="cerrarModal('modalEditarCliente')">Cancelar</button>
-      <button class="btn btn-warning"   onclick="actualizarCliente()">Actualizar</button>
+    <input type="hidden" id="eRowIdx">
+    <input type="hidden" id="eOrden">
+    <div class="fg"><label>N° Cliente</label><input type="text" id="eNro"></div>
+    <div class="fg"><label>Nombre</label><input type="text" id="eNom"></div>
+    <div class="fg"><label>Zona</label><select id="eZona"></select></div>
+    <div class="mbtns">
+      <button class="btn btn-s" onclick="cerrarModal('mEditCliente')">Cancelar</button>
+      <button class="btn btn-w" onclick="actualizarCliente()">Actualizar</button>
     </div>
   </div>
 </div>
 
 <!-- MODAL GESTOR ZONAS -->
-<div class="modal-overlay" id="modalZona">
-  <div class="modal" style="max-width:460px">
+<div class="moverlay" id="mZonas">
+  <div class="modal" style="max-width:440px">
     <h3>⚙ Gestionar Zonas</h3>
-    <p style="font-size:12px;color:var(--texto-sub);margin-bottom:10px">Las zonas son etiquetas para agrupar clientes. El orden de los clientes es lo que importa.</p>
-    <div id="gestorLista" style="max-height:300px;overflow-y:auto;margin-bottom:10px"></div>
-    <button class="btn btn-success btn-sm" onclick="agregarZonaGestor()">＋ Agregar zona</button>
-    <div class="modal-btns">
-      <button class="btn btn-secondary" onclick="cerrarModal('modalZona')">Cancelar</button>
-      <button class="btn btn-primary"   onclick="guardarZonasGestor()">Guardar</button>
+    <p style="font-size:11px;color:var(--sub);margin-bottom:9px">Las zonas son etiquetas. El orden de los clientes es lo que importa.</p>
+    <div id="gLista" style="max-height:280px;overflow-y:auto;margin-bottom:9px"></div>
+    <button class="btn btn-g btn-sm" onclick="agregarZona()">＋ Agregar zona</button>
+    <div class="mbtns">
+      <button class="btn btn-s" onclick="cerrarModal('mZonas')">Cancelar</button>
+      <button class="btn btn-p" onclick="guardarZonas()">Guardar</button>
     </div>
   </div>
 </div>
 
 <!-- PANEL CONSULTA -->
-<div class="panel-consulta" id="panelConsulta">
-  <div class="panel-header">
-    <div><h2>👁 Panel Consulta</h2><div class="fecha" id="panelFecha"></div></div>
-    <button class="btn btn-secondary" onclick="cerrarPanel()">✕ Cerrar</button>
+<div class="panel" id="panel">
+  <div class="phdr">
+    <div><h2>👁 Panel Consulta</h2><div class="pf" id="pFecha"></div></div>
+    <button class="btn btn-s" onclick="cerrarPanel()">✕ Cerrar</button>
   </div>
-  <div class="panel-totales"  id="panelTotales"></div>
-  <div class="panel-zonas"    id="panelZonasGrid"></div>
+  <div class="ptots" id="pTots"></div>
+  <div class="pgrid" id="pGrid"></div>
 </div>
 
 <!-- LOADING -->
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="spinner"></div>
-  <span id="loadingMsg">Procesando...</span>
-</div>
-<div class="toast-container" id="toastContainer"></div>
+<div class="loverlay" id="loverlay"><div class="spin"></div><span id="lmsg">Procesando...</span></div>
+<div class="tc" id="tc"></div>
 
 <script>
-const CONFIG = {
-  SHEET_ID: '1wd58wlT6UExRBs52375mLcbt3yETqVajdFNbhugyXG4',
-  API_KEY:  'AIzaSyCQD9Yet5wKtKlRtLN7ldwQvMgvMe-92IM',
+// ═══════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════
+const CFG = {
+  SID: '1wd58wlT6UExRBs52375mLcbt3yETqVajdFNbhugyXG4',
+  KEY: 'AIzaSyCQD9Yet5wKtKlRtLN7ldwQvMgvMe-92IM',
   SA: {
-    client_email: 'hoja-de-ruta@hojaderutaexp2026.iam.gserviceaccount.com',
-    private_key: `-----BEGIN PRIVATE KEY-----
+    email: 'hoja-de-ruta@hojaderutaexp2026.iam.gserviceaccount.com',
+    key: `-----BEGIN PRIVATE KEY-----
 MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQD1+rsIEw/IEDRa
 JIoUuodStzJ7f86HZ0HIE+6BBS4lFTHzz3DC0Pz7yeCSv411kKYqlR8VkK7qzrSj
 6wLWHAYclSqHucPs6pvX9Ovl2o0gg2dXUO7IuS9UVXtn6xGJckT6XcOLUXrOfP0W
@@ -557,106 +449,131 @@ yDgyzl+Hbpte3nYsV46ID8rubETCykj6/r/41RzhxeQqjaaMLysJi72NSr4mCFPf
 UqmNM1yjWnIv8Qc1/3x3U8c=
 -----END PRIVATE KEY-----`
   },
-  REFRESH_MS:  15000,
-  LOCK_TTL_MS: 12000,
+  REFRESH: 20000,
+  LOCK_TTL: 12000,
 };
 
-let state = {
-  zonas: [], clientes: [], bultos: {}, comentarios: {}, usuarios: {},
-  choferes: {}, conPedido: new Map(), usuario: '',
-  zonaResetPendiente: null, tokenCache: null, tokenExp: 0,
-  resetModalMostrado: false,
+// ═══════════════════════════════════════════════
+// ESTADO — bultos usa solo nro como clave (sin fecha)
+// ═══════════════════════════════════════════════
+const S = {
+  zonas:[], clientes:[], choferes:{},
+  bultos:{},      // {nro: cantidad}  — NUNCA fecha|nro
+  comentarios:{}, // {nro: texto}
+  usuarios:{},    // {nro: usuario}
+  pedidos: new Map(), // {nro: cantidad}
+  usuario:'', zonaReset:null,
+  tok:null, tokExp:0,
+  guardando: new Set(), // nros que están siendo guardados ahora
 };
 
-// ── USUARIO ──
+// ═══════════════════════════════════════════════
+// USUARIO
+// ═══════════════════════════════════════════════
 function confirmarUsuario(){
-  const val=document.getElementById('fUsuario').value.trim();
-  if(!val){toast('Ingresá tu nombre para continuar','warning');return;}
-  state.usuario=val;
-  document.getElementById('usuarioNombre').textContent=val;
-  document.getElementById('usuarioBadge').style.display='flex';
-  cerrarModal('modalUsuario');
+  const v=document.getElementById('fUsuario').value.trim();
+  if(!v){toast('Ingresá tu nombre','wa');return;}
+  S.usuario=v;
+  document.getElementById('unombre').textContent=v;
+  document.getElementById('ubadge').style.display='flex';
+  cerrarModal('mUsuario');
 }
 
-// ── JWT ──
-async function getAccessToken(){
-  if(state.tokenCache&&Date.now()<state.tokenExp-60000) return state.tokenCache;
-  const{client_email,private_key}=CONFIG.SA;
+// ═══════════════════════════════════════════════
+// JWT
+// ═══════════════════════════════════════════════
+async function token(){
+  if(S.tok&&Date.now()<S.tokExp-60000) return S.tok;
   const now=Math.floor(Date.now()/1000);
-  const hdr=b64u(JSON.stringify({alg:'RS256',typ:'JWT'}));
-  const bdy=b64u(JSON.stringify({iss:client_email,scope:'https://www.googleapis.com/auth/spreadsheets',aud:'https://oauth2.googleapis.com/token',exp:now+3600,iat:now}));
-  const si=hdr+'.'+bdy;
-  const pem=private_key.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\n/g,'');
+  const h=b64u(JSON.stringify({alg:'RS256',typ:'JWT'}));
+  const p=b64u(JSON.stringify({iss:CFG.SA.email,scope:'https://www.googleapis.com/auth/spreadsheets',
+    aud:'https://oauth2.googleapis.com/token',exp:now+3600,iat:now}));
+  const si=h+'.'+p;
+  const pem=CFG.SA.key.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\n/g,'');
   const bin=Uint8Array.from(atob(pem),c=>c.charCodeAt(0));
-  const key=await crypto.subtle.importKey('pkcs8',bin.buffer,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['sign']);
+  const key=await crypto.subtle.importKey('pkcs8',bin.buffer,
+    {name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['sign']);
   const sig=await crypto.subtle.sign('RSASSA-PKCS1-v1_5',key,new TextEncoder().encode(si));
   const jwt=si+'.'+b64u(sig);
-  const r=await fetch('https://oauth2.googleapis.com/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:`grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`});
+  const r=await fetch('https://oauth2.googleapis.com/token',{method:'POST',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:`grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`});
   const d=await r.json();
   if(!d.access_token) throw new Error('Auth fallida');
-  state.tokenCache=d.access_token;state.tokenExp=Date.now()+d.expires_in*1000;
-  return d.access_token;
+  S.tok=d.access_token; S.tokExp=Date.now()+d.expires_in*1000;
+  return S.tok;
 }
 function b64u(v){
   const s=typeof v==='string'?btoa(unescape(encodeURIComponent(v))):btoa(String.fromCharCode(...new Uint8Array(v)));
   return s.replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
 }
 
-// ── SHEETS API ──
-async function sheetsRead(range){
-  const r=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(range)}?key=${CONFIG.API_KEY}`);
-  if(!r.ok) throw new Error('Error leyendo '+range);
-  return (await r.json()).values||[];
+// ═══════════════════════════════════════════════
+// SHEETS API
+// ═══════════════════════════════════════════════
+async function sRead(r){
+  const res=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CFG.SID}/values/${encodeURIComponent(r)}?key=${CFG.KEY}`);
+  if(!res.ok) throw new Error('Error leyendo '+r);
+  return (await res.json()).values||[];
 }
-async function sheetsWrite(range,values){
-  const tk=await getAccessToken();
-  const r=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(range)}?valueInputOption=RAW`,{method:'PUT',headers:{'Authorization':'Bearer '+tk,'Content-Type':'application/json'},body:JSON.stringify({range,majorDimension:'ROWS',values})});
-  if(!r.ok) throw new Error(JSON.stringify(await r.json()));
+async function sWrite(r,v){
+  const tk=await token();
+  const res=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CFG.SID}/values/${encodeURIComponent(r)}?valueInputOption=RAW`,
+    {method:'PUT',headers:{'Authorization':'Bearer '+tk,'Content-Type':'application/json'},
+    body:JSON.stringify({range:r,majorDimension:'ROWS',values:v})});
+  if(!res.ok) throw new Error(JSON.stringify(await res.json()));
 }
-async function sheetsAppend(range,values){
-  const tk=await getAccessToken();
-  const r=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(range)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,{method:'POST',headers:{'Authorization':'Bearer '+tk,'Content-Type':'application/json'},body:JSON.stringify({range,majorDimension:'ROWS',values})});
-  if(!r.ok) throw new Error(JSON.stringify(await r.json()));
+async function sAppend(r,v){
+  const tk=await token();
+  const res=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CFG.SID}/values/${encodeURIComponent(r)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+    {method:'POST',headers:{'Authorization':'Bearer '+tk,'Content-Type':'application/json'},
+    body:JSON.stringify({range:r,majorDimension:'ROWS',values:v})});
+  if(!res.ok) throw new Error(JSON.stringify(await res.json()));
 }
-async function sheetsClear(range){
-  const tk=await getAccessToken();
-  await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(range)}:clear`,{method:'POST',headers:{'Authorization':'Bearer '+tk}});
+async function sClear(r){
+  const tk=await token();
+  await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CFG.SID}/values/${encodeURIComponent(r)}:clear`,
+    {method:'POST',headers:{'Authorization':'Bearer '+tk}});
 }
 
-// ── LOCK ──
-async function adquirirLock(maxWait=15000){
+// ═══════════════════════════════════════════════
+// LOCK
+// ═══════════════════════════════════════════════
+async function lockAcquire(max=15000){
   const t0=Date.now();
-  while(Date.now()-t0<maxWait){
-    const rows=await sheetsRead('Lock!A1:B1');
-    const val=rows[0]?.[0]||'libre',ts=parseInt(rows[0]?.[1]||'0');
-    if(val==='libre'||Date.now()-ts>CONFIG.LOCK_TTL_MS){
-      await sheetsWrite('Lock!A1:B1',[['ocupado',Date.now().toString()]]);
+  while(Date.now()-t0<max){
+    const rows=await sRead('Lock!A1:B1');
+    const val=rows[0]?.[0]||'libre', ts=parseInt(rows[0]?.[1]||'0');
+    if(val==='libre'||Date.now()-ts>CFG.LOCK_TTL){
+      await sWrite('Lock!A1:B1',[['ocupado',Date.now().toString()]]);
       setStatus('ocupado','Guardando...'); return;
     }
-    setStatus('ocupado','Esperá... otra PC está guardando');
+    setStatus('ocupado','Esperando... otra PC está guardando');
     await sleep(2000);
   }
   throw new Error('No se pudo adquirir el lock');
 }
-async function liberarLock(){
-  try{await sheetsWrite('Lock!A1:B1',[['libre','0']]);}catch(e){}
+async function lockRelease(){
+  try{await sWrite('Lock!A1:B1',[['libre','0']]);}catch(e){}
   setStatus('libre','Listo para ingresar datos');
 }
 
-// ── CARGA DE DATOS ──
+// ═══════════════════════════════════════════════
+// CARGA DE DATOS
+// ═══════════════════════════════════════════════
 async function cargarDatos(){
   try{
     setStatus('conectando','Conectando...');
-    const [rZon,rCli,rBul,rCho,rPed]=await Promise.all([
-      sheetsRead('Zonas!A2:B100'),
-      sheetsRead('Clientes!A2:D500'),
-      sheetsRead('Bultos!A2:F1000'),
-      sheetsRead('Choferes!A2:B100'),
-      sheetsRead('Pedidos!A2:D1000'),
+    const [rZ,rC,rB,rCh,rP]=await Promise.all([
+      sRead('Zonas!A2:B100'),
+      sRead('Clientes!A2:D500'),
+      sRead('Bultos!A2:F1000'),
+      sRead('Choferes!A2:B100'),
+      sRead('Pedidos!A2:D1000'),
     ]);
 
-    state.zonas=rZon.filter(r=>r[1]).map(r=>({nombre:r[1].trim()}));
-    state.clientes=rCli.filter(r=>r[2]).map((r,i)=>({
+    S.zonas=rZ.filter(r=>r[1]).map(r=>({nombre:r[1].trim()}));
+    S.clientes=rC.filter(r=>r[2]).map((r,i)=>({
       rowIndex:i+2,
       orden:parseInt(r[0])||i+1,
       nro:r[1]?.trim()||'',
@@ -664,100 +581,152 @@ async function cargarDatos(){
       zona:r[3]?.trim()||''
     })).sort((a,b)=>a.orden-b.orden);
 
-    // Detectar fecha a cargar (hoy o última disponible)
-    const hoy=fechaHoy();
-    const fechasEnSheet=[...new Set(rBul.filter(r=>r[0]).map(r=>r[0].trim()))];
-    const hayDatosDeHoy=fechasEnSheet.includes(hoy);
-    const hayDatosViejos=fechasEnSheet.length>0&&!hayDatosDeHoy;
-    const fechaACargar=hayDatosDeHoy?hoy:(fechasEnSheet[fechasEnSheet.length-1]||hoy);
+    // Choferes
+    S.choferes={};
+    rCh.forEach(r=>{if(r[0]) S.choferes[r[0].trim()]=r[1]?.trim()||'';});
 
-    state.bultos={}; state.comentarios={}; state.usuarios={};
-    rBul.filter(r=>r[0]&&r[1]).forEach(r=>{
-      if(r[0]===fechaACargar){
-        const key=r[0].trim()+'|'+r[1].trim();
-        state.bultos[key]=parseInt(r[3])||0;
-        state.comentarios[key]=r[4]?.trim()||'';
-        state.usuarios[key]=r[5]?.trim()||'';
-      }
-    });
+    // Bultos — clave SOLO nro, sin fecha
+    // Si hay datos de hoy usarlos, sino usar la última fecha disponible
+    const hoy=hoyStr();
+    const fechas=[...new Set(rB.filter(r=>r[0]).map(r=>r[0].trim()))].sort();
+    const fechaUsar=fechas.includes(hoy)?hoy:(fechas[fechas.length-1]||hoy);
 
-    state.choferes={};
-    rCho.forEach(r=>{if(r[0]) state.choferes[r[0].trim()]=r[1]?.trim()||'';});
-
-    // Cargar pedidos desde Sheet (sincronizados entre PCs)
-    state.conPedido=new Map();
-    rPed.forEach(r=>{
-      if(r[0]===hoy&&r[1]){
+    // Solo actualizar campos que NO están siendo guardados ahora mismo
+    const nuevoBultos={}, nuevoCom={}, nuevoUsr={};
+    rB.forEach(r=>{
+      if(r[0]===fechaUsar&&r[1]){
         const nro=r[1].trim();
-        const cant=parseInt(r[3])||1;
-        state.conPedido.set(nro,cant);
+        nuevoBultos[nro]=parseInt(r[3])||0;
+        nuevoCom[nro]=r[4]?.trim()||'';
+        nuevoUsr[nro]=r[5]?.trim()||'';
+      }
+    });
+    // Actualizar state respetando lo que se está guardando
+    Object.keys(nuevoBultos).forEach(nro=>{
+      if(!S.guardando.has(nro)){
+        S.bultos[nro]=nuevoBultos[nro];
+        S.comentarios[nro]=nuevoCom[nro];
+        S.usuarios[nro]=nuevoUsr[nro];
+      }
+    });
+    // Clientes que no están en el Sheet → poner en 0 solo si no se están guardando
+    S.clientes.forEach(c=>{
+      if(!(c.nro in nuevoBultos)&&!S.guardando.has(c.nro)){
+        if(!(c.nro in S.bultos)) S.bultos[c.nro]=0;
       }
     });
 
-    if(hayDatosViejos&&!state.resetModalMostrado){
-      state.resetModalMostrado=true;
-      // En hoja directa no hay modal de reset global, se maneja por zona
-      // Solo avisamos con un toast
-      toast('Hay datos de días anteriores. Usá el botón "Limpiar" en cada zona cuando quieras resetear.','warning');
-    }
+    // Pedidos
+    S.pedidos=new Map();
+    rP.forEach(r=>{
+      if(r[0]===hoy&&r[1]) S.pedidos.set(r[1].trim(),parseInt(r[3])||1);
+    });
 
     renderTodo();
     setStatus('libre','Listo para ingresar datos');
   }catch(e){
     setStatus('error','Error de conexión');
-    toast('Error al cargar: '+e.message,'error');
+    toast('Error al cargar: '+e.message,'er');
   }
 }
 
-// ── KEY para bultos: fecha|nro ──
-function bKey(nro){ return fechaHoy()+'|'+nro; }
+// Auto-refresh inteligente
+async function autoRefresh(){
+  const activo=document.activeElement;
+  const esInput=activo&&(activo.tagName==='INPUT'||activo.tagName==='TEXTAREA');
+  if(esInput){
+    // Solo actualizar datos del Sheet sin rerenderizar el campo activo
+    await refreshSilencioso();
+  } else {
+    await cargarDatos();
+  }
+}
 
-// ── RENDER ──
+async function refreshSilencioso(){
+  try{
+    const [rB,rP]=await Promise.all([
+      sRead('Bultos!A2:F1000'),
+      sRead('Pedidos!A2:D1000'),
+    ]);
+    const hoy=hoyStr();
+    const fechas=[...new Set(rB.filter(r=>r[0]).map(r=>r[0].trim()))].sort();
+    const fechaUsar=fechas.includes(hoy)?hoy:(fechas[fechas.length-1]||hoy);
+    const activo=document.activeElement;
+    const nroActivo=activo?.dataset?.nro;
+
+    rB.forEach(r=>{
+      if(r[0]===fechaUsar&&r[1]){
+        const nro=r[1].trim();
+        if(nro===nroActivo||S.guardando.has(nro)) return; // no tocar el campo activo ni los que se están guardando
+        const bNuevo=parseInt(r[3])||0;
+        const comNuevo=r[4]?.trim()||'';
+        S.bultos[nro]=bNuevo;
+        S.comentarios[nro]=comNuevo;
+        S.usuarios[nro]=r[5]?.trim()||'';
+        // Actualizar DOM
+        const trEl=document.querySelector(`tr[data-nro="${nro}"]`);
+        if(trEl){
+          const ib=trEl.querySelector('.ibul');
+          const ic=trEl.querySelector('.icom');
+          if(ib&&ib!==activo){ib.value=bNuevo>0?bNuevo:'';ib.classList.toggle('on',bNuevo>0);}
+          if(ic&&ic!==activo){ic.value=comNuevo;ic.classList.toggle('on',!!comNuevo);}
+          trEl.className=bNuevo>0?'hi':(S.pedidos.has(nro)?'cp':'sb');
+        }
+      }
+    });
+
+    S.pedidos=new Map();
+    rP.forEach(r=>{if(r[0]===hoy&&r[1]) S.pedidos.set(r[1].trim(),parseInt(r[3])||1);});
+    renderResumen();
+  }catch(e){ /* silencioso */ }
+}
+
+// ═══════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════
 function renderTodo(){
   const busq=document.getElementById('busqueda').value.toLowerCase().trim();
-  const main=document.getElementById('mainContent');
+  const main=document.getElementById('main');
   main.innerHTML='';
   let tb=0,tp=0,tz=0,pend=0;
 
-  state.zonas.forEach(zona=>{
-    let clis=state.clientes.filter(c=>c.zona===zona.nombre);
+  S.zonas.forEach(zona=>{
+    let clis=S.clientes.filter(c=>c.zona===zona.nombre);
     if(busq) clis=clis.filter(c=>c.nombre.toLowerCase().includes(busq)||c.nro.includes(busq));
 
-    const bZona=clis.reduce((s,c)=>s+(state.bultos[bKey(c.nro)]||0),0);
-    const pZona=clis.filter(c=>(state.bultos[bKey(c.nro)]||0)>0).length;
+    const bZona=clis.reduce((s,c)=>s+(S.bultos[c.nro]||0),0);
+    const pZona=clis.filter(c=>(S.bultos[c.nro]||0)>0).length;
+    const tienePed=clis.some(c=>S.pedidos.has(c.nro));
     if(bZona>0){tb+=bZona;tp+=pZona;tz++;}
-    clis.forEach(c=>{if(state.conPedido.has(c.nro)&&!(state.bultos[bKey(c.nro)]>0)) pend++;});
+    clis.forEach(c=>{if(S.pedidos.has(c.nro)&&!(S.bultos[c.nro]>0)) pend++;});
 
     const card=document.createElement('div');
-    card.className='zona-card';
+    card.className='zcard';
     card.dataset.zona=zona.nombre;
-    const chofer=state.choferes[zona.nombre]||'';
+    const chofer=S.choferes[zona.nombre]||'';
 
     card.innerHTML=`
-      <div class="zona-header">
-        <span class="zona-nombre">📍 ${zona.nombre}</span>
-        <div class="zona-chofer-wrap">
+      <div class="zhdr">
+        <span class="znombre">📍 ${zona.nombre}</span>
+        <div class="zchofer-wrap">
           <label>Chofer:</label>
-          <input class="zona-chofer no-print" type="text" placeholder="Chofer del día..."
+          <input class="zchofer no-print" type="text" placeholder="Chofer del día..."
             value="${chofer}" onclick="event.stopPropagation()"
             onchange="guardarChofer('${zona.nombre}',this.value)">
         </div>
-        <div class="zona-resumen">
-          <span><strong>${bZona}</strong> bultos</span>
-          <span><strong>${pZona}</strong> pedidos</span>
+        <div class="zres"><span><strong>${bZona}</strong> bultos</span><span><strong>${pZona}</strong> ped.</span></div>
+        <div class="zbtns no-print">
+          <button class="zbtn-imp" onclick="imprimirZona('${zona.nombre}',event)">🖨</button>
+          <button class="zbtn-rst" onclick="pedirResetZona('${zona.nombre}',event)">🗑</button>
         </div>
-        <div class="zona-btns no-print">
-          <button class="btn-zona-imprimir" onclick="imprimirZona('${zona.nombre}',event)">🖨 Imprimir</button>
-          <button class="btn-zona-reset" onclick="pedirResetZona('${zona.nombre}',event)">🗑 Limpiar</button>
-        </div>
-        <span class="zona-chevron" onclick="toggleZona(this)">▼</span>
+        <span class="zchev" onclick="toggleZona(this)">▼</span>
       </div>
-      <div class="zona-body">
-        <table class="tabla-clientes">
+      <div class="zbody">
+        <table class="tbl">
           <colgroup>
-            <col class="col-orden"><col class="col-nro"><col class="col-nombre">
-            <col class="col-bultos"><col class="col-coment">
-            <col class="col-usuario"><col class="col-acciones"><col class="col-check">
+            <col class="col-ord"><col class="col-nro"><col class="col-nom">
+            <col class="col-bul"><col class="col-com">
+            <col class="col-usr"><col class="col-acc"><col class="col-chk">
           </colgroup>
           <thead><tr>
             <th>#</th><th>N° Cliente</th><th>Nombre</th><th>Bultos</th>
@@ -766,168 +735,195 @@ function renderTodo(){
           </tr></thead>
           <tbody>
             ${clis.map(c=>{
-              const k=bKey(c.nro);
-              const b=state.bultos[k]||0;
-              const com=state.comentarios[k]||'';
-              const usr=state.usuarios[k]||'';
-              const tieneP=state.conPedido.has(c.nro);
-              const trCls=b>0?'highlight':(tieneP?'con-pedido':'sin-bultos');
+              const b=S.bultos[c.nro]||0;
+              const com=S.comentarios[c.nro]||'';
+              const usr=S.usuarios[c.nro]||'';
+              const tp=S.pedidos.has(c.nro);
+              const trCls=b>0?'hi':(tp?'cp':'sb');
+              const cant=S.pedidos.get(c.nro)||0;
               return `<tr class="${trCls}" data-nro="${c.nro}">
-                <td class="cliente-orden">${c.orden}</td>
-                <td class="cliente-nro">${c.nro}</td>
-                <td class="cliente-nombre">${c.nombre}${tieneP&&b===0?`<span class="pedido-badge">${state.conPedido.get(c.nro)} PEDIDO${state.conPedido.get(c.nro)>1?'S':''}</span>`:''}</td>
-                <td><input type="number" min="0" class="input-bultos ${b>0?'tiene-valor':''}"
+                <td class="cord">${c.orden}</td>
+                <td class="cnro">${c.nro}</td>
+                <td class="cnom">${c.nombre}${tp&&b===0?`<span class="pbadge">${cant} PEDIDO${cant>1?'S':''}</span>`:''}</td>
+                <td><input type="number" min="0" class="ibul ${b>0?'on':''}"
                   value="${b>0?b:''}" placeholder="0" data-nro="${c.nro}"
                   onchange="guardarBultos('${c.nro}',this)"
-                  oninput="this.classList.toggle('tiene-valor',this.value>0)"></td>
-                <td><input type="text" maxlength="80" class="input-comentario ${com?'tiene-valor':''}"
+                  oninput="this.classList.toggle('on',this.value>0)"></td>
+                <td><input type="text" maxlength="80" class="icom ${com?'on':''}"
                   value="${com.replace(/"/g,'&quot;')}" placeholder=""
                   data-nro="${c.nro}" onchange="guardarComentario('${c.nro}',this)"></td>
-                <td class="usuario-col-td no-print">${usr}</td>
-                <td class="no-print"><button class="btn-edit-cliente" onclick="abrirEditarCliente(${c.rowIndex},'${c.nro}','${c.nombre.replace(/'/g,"\\'")}','${c.zona}',${c.orden})">✏️</button></td>
-                <td><span class="check-print"></span></td>
+                <td class="cusr no-print">${usr}</td>
+                <td class="no-print"><button class="bedit" onclick="abrirEditarCliente(${c.rowIndex},'${c.nro}','${c.nombre.replace(/'/g,"\\'")}','${c.zona}',${c.orden})">✏️</button></td>
+                <td><span class="chk"></span></td>
               </tr>`;
             }).join('')}
           </tbody>
         </table>
-        <div class="zona-footer">
-          <button class="btn-add-cliente no-print" onclick="abrirModalCliente('${zona.nombre}')">＋ Agregar cliente a ${zona.nombre}</button>
-          <span style="font-size:11px;color:var(--texto-sub)">${clis.length} clientes</span>
+        <div class="zfoot">
+          <button class="badd no-print" onclick="abrirModalCliente('${zona.nombre}')">＋ Agregar cliente a ${zona.nombre}</button>
+          <span style="font-size:10px;color:var(--sub)">${clis.length} clientes</span>
         </div>
       </div>`;
     main.appendChild(card);
   });
 
   if(!main.children.length)
-    main.innerHTML=`<div class="no-resultados"><div class="ico">🔍</div><p>Sin resultados${busq?' para "'+busq+'"':''}</p></div>`;
+    main.innerHTML=`<div class="nores"><div class="ico">🔍</div><p>Sin resultados${busq?' para "'+busq+'"':''}</p></div>`;
 
-  document.getElementById('rTotalBultos').textContent=tb;
-  document.getElementById('rTotalPedidos').textContent=tp;
-  document.getElementById('rTotalZonas').textContent=tz;
-  const pDiv=document.getElementById('resumenPendientes');
-  if(state.conPedido.size>0){pDiv.style.display='flex';document.getElementById('rPendientes').textContent=pend;}
-  else pDiv.style.display='none';
+  document.getElementById('rBultos').textContent=tb;
+  document.getElementById('rPedidos').textContent=tp;
+  document.getElementById('rZonas').textContent=tz;
+  const pd=document.getElementById('rPendDiv');
+  if(S.pedidos.size>0){pd.style.display='flex';document.getElementById('rPend').textContent=pend;}
+  else pd.style.display='none';
 }
 
-function toggleZona(el){el.closest('.zona-card').classList.toggle('collapsed');}
+function toggleZona(el){el.closest('.zcard').classList.toggle('col');}
 function filtrar(){renderTodo();}
 
-// ── GUARDAR BULTOS ──
+function renderResumen(){
+  let tb=0,tp=0;const zs=new Set();
+  S.clientes.forEach(c=>{const b=S.bultos[c.nro]||0;if(b>0){tb+=b;tp++;zs.add(c.zona);}});
+  document.getElementById('rBultos').textContent=tb;
+  document.getElementById('rPedidos').textContent=tp;
+  document.getElementById('rZonas').textContent=zs.size;
+}
+
+// ═══════════════════════════════════════════════
+// GUARDAR BULTOS — clave solo nro
+// ═══════════════════════════════════════════════
 async function guardarBultos(nro,input){
-  const k=bKey(nro);
-  state.bultos[k]=parseInt(input.value)||0;
+  const b=parseInt(input.value)||0;
+  S.bultos[nro]=b;
+  S.guardando.add(nro); // marcar como en proceso de guardado
   renderResumen();
   const tr=input.closest('tr');
   if(tr){
-    const b=state.bultos[k];
-    tr.className=b>0?'highlight':(state.conPedido.has(nro)?'con-pedido':'sin-bultos');
-    const badge=tr.querySelector('.pedido-badge');
-    if(badge){
-      if(state.conPedido.has(nro)&&b===0){const n=state.conPedido.get(nro);badge.textContent=`${n} PEDIDO${n>1?'S':''}`;badge.style.display='';}
-      else badge.style.display='none';
-    }
+    tr.className=b>0?'hi':(S.pedidos.has(nro)?'cp':'sb');
+    const badge=tr.querySelector('.pbadge');
+    if(badge) badge.style.display=(S.pedidos.has(nro)&&b===0)?'':'none';
   }
-  await _guardarFila(nro);
+  await _guardar(nro);
+  S.guardando.delete(nro); // liberar
 }
+
 async function guardarComentario(nro,input){
-  const k=bKey(nro);
-  state.comentarios[k]=input.value.trim();
-  input.classList.toggle('tiene-valor',!!input.value.trim());
-  await _guardarFila(nro);
-}
-async function _guardarFila(nro){
-  const hoy=fechaHoy(),k=bKey(nro);
-  const cantidad=state.bultos[k]||0, comentario=state.comentarios[k]||'', usuario=state.usuario;
-  const cliente=state.clientes.find(c=>c.nro===nro);
-  const nombre=cliente?.nombre||'', zona=cliente?.zona||'';
-  try{
-    await adquirirLock();
-    const rows=await sheetsRead('Bultos!A2:F1000');
-    let idx=-1; rows.forEach((r,i)=>{if(r[0]===hoy&&r[1]===nro)idx=i;});
-    const fila=[hoy,nro,nombre,cantidad.toString(),comentario,usuario];
-    if(idx>=0) await sheetsWrite(`Bultos!A${idx+2}:F${idx+2}`,[fila]);
-    else       await sheetsAppend('Bultos!A:F',[fila]);
-    await liberarLock();
-  }catch(e){await liberarLock();toast('Error al guardar: '+e.message,'error');}
-  registrarMovimiento(nro,nombre,zona,'carga_bultos',cantidad,state.comentarios[k]||'',usuario);
+  S.comentarios[nro]=input.value.trim();
+  input.classList.toggle('on',!!input.value.trim());
+  S.guardando.add(nro);
+  await _guardar(nro);
+  S.guardando.delete(nro);
 }
 
-// ── CHOFER POR ZONA ──
+async function _guardar(nro){
+  const hoy=hoyStr();
+  const b=S.bultos[nro]||0;
+  const com=S.comentarios[nro]||'';
+  const usr=S.usuario;
+  const cli=S.clientes.find(c=>c.nro===nro);
+  const nombre=cli?.nombre||'', zona=cli?.zona||'';
+  try{
+    await lockAcquire();
+    const rows=await sRead('Bultos!A2:F1000');
+    // Buscar fila existente con fecha de hoy y este nro
+    let idx=-1;
+    rows.forEach((r,i)=>{if(r[0]===hoy&&r[1]===nro) idx=i;});
+    const fila=[hoy,nro,nombre,b.toString(),com,usr];
+    if(idx>=0) await sWrite(`Bultos!A${idx+2}:F${idx+2}`,[fila]);
+    else        await sAppend('Bultos!A:F',[fila]);
+    await lockRelease();
+  }catch(e){
+    await lockRelease();
+    toast('Error al guardar: '+e.message,'er');
+    return;
+  }
+  // Log de movimiento (sin lock, es append)
+  logMovimiento(nro,nombre,zona,'carga_bultos',b,com,usr);
+}
+
+// ═══════════════════════════════════════════════
+// CHOFER
+// ═══════════════════════════════════════════════
 async function guardarChofer(zona,valor){
-  state.choferes[zona]=valor.trim();
+  S.choferes[zona]=valor.trim();
   try{
-    await adquirirLock();
-    const rows=await sheetsRead('Choferes!A2:B100');
-    let idx=-1; rows.forEach((r,i)=>{if(r[0]===zona)idx=i;});
-    if(idx>=0) await sheetsWrite(`Choferes!A${idx+2}:B${idx+2}`,[[zona,valor.trim()]]);
-    else       await sheetsAppend('Choferes!A:B',[[zona,valor.trim()]]);
-    await liberarLock(); toast('Chofer guardado','success');
-  }catch(e){await liberarLock();toast('Error al guardar chofer','error');}
+    await lockAcquire();
+    const rows=await sRead('Choferes!A2:B100');
+    let idx=-1; rows.forEach((r,i)=>{if(r[0]===zona) idx=i;});
+    if(idx>=0) await sWrite(`Choferes!A${idx+2}:B${idx+2}`,[[zona,valor.trim()]]);
+    else       await sAppend('Choferes!A:B',[[zona,valor.trim()]]);
+    await lockRelease(); toast('Chofer guardado','ok');
+  }catch(e){await lockRelease();toast('Error al guardar chofer','er');}
 }
 
-// ── RESET TOTAL ──
-function pedirResetTotalDirecta(){ abrirModal('modalResetTotal'); }
-async function confirmarResetTotalDirecta(){
-  cerrarModal('modalResetTotal');
-  showLoading('Reseteando todo...');
+// ═══════════════════════════════════════════════
+// RESET TOTAL
+// ═══════════════════════════════════════════════
+function pedirResetTotal(){abrirModal('mResetTotal');}
+async function confirmarResetTotal(){
+  cerrarModal('mResetTotal'); showLoading('Reseteando...');
   try{
-    await adquirirLock();
-    await sheetsClear('Bultos!A2:F1000');
-    await sheetsClear('Pedidos!A2:D1000');
-    await liberarLock();
-    state.bultos={}; state.comentarios={}; state.usuarios={};
-    state.conPedido=new Map(); state.resetModalMostrado=false;
-    renderTodo(); toast('Hoja reseteada correctamente','success');
-  }catch(e){ await liberarLock(); toast('Error: '+e.message,'error'); }
+    await lockAcquire();
+    await sClear('Bultos!A2:F1000');
+    await sClear('Pedidos!A2:D1000');
+    await lockRelease();
+    S.bultos={}; S.comentarios={}; S.usuarios={};
+    S.pedidos=new Map(); S.guardando=new Set();
+    S.clientes.forEach(c=>{S.bultos[c.nro]=0;});
+    renderTodo(); toast('Hoja reseteada','ok');
+  }catch(e){await lockRelease();toast('Error: '+e.message,'er');}
   hideLoading();
 }
 
-// ── RESET POR ZONA ──
+// ═══════════════════════════════════════════════
+// RESET POR ZONA
+// ═══════════════════════════════════════════════
 function pedirResetZona(zona,event){
   event.stopPropagation();
-  state.zonaResetPendiente=zona;
-  document.getElementById('modalResetZonaTexto').textContent=`¿Querés limpiar todos los bultos y comentarios de la zona "${zona}"? Esta acción no se puede deshacer.`;
-  abrirModal('modalResetZona');
+  S.zonaReset=zona;
+  document.getElementById('mResetZonaTxt').textContent=
+    `¿Limpiar todos los bultos de la zona "${zona}"? No se puede deshacer.`;
+  abrirModal('mResetZona');
 }
 async function confirmarResetZona(){
-  const zona=state.zonaResetPendiente;
-  cerrarModal('modalResetZona');
-  showLoading('Limpiando zona...');
+  const zona=S.zonaReset;
+  cerrarModal('mResetZona'); showLoading('Limpiando zona...');
   try{
-    const hoy=fechaHoy();
-    const nrosZona=state.clientes.filter(c=>c.zona===zona).map(c=>c.nro);
-    await adquirirLock();
-    const [rowsBultos,rowsPedidos]=await Promise.all([
-      sheetsRead('Bultos!A2:F1000'),
-      sheetsRead('Pedidos!A2:D1000'),
-    ]);
-    const updates=[];
-    rowsBultos.forEach((r,i)=>{
-      if(nrosZona.includes(r[1]?.trim()))
-        updates.push({range:`Bultos!A${i+2}:F${i+2}`,values:[[r[0],r[1],'',0,'','']]});
-    });
-    rowsPedidos.forEach((r,i)=>{
-      if(r[0]===hoy&&nrosZona.includes(r[1]?.trim()))
-        updates.push({range:`Pedidos!A${i+2}:D${i+2}`,values:[['','','','']]});
-    });
-    for(const u of updates) await sheetsWrite(u.range,u.values);
-    await liberarLock();
+    const hoy=hoyStr();
+    const nrosZona=S.clientes.filter(c=>c.zona===zona).map(c=>c.nro);
+    await lockAcquire();
+    const rows=await sRead('Bultos!A2:F1000');
+    for(let i=0;i<rows.length;i++){
+      const r=rows[i];
+      if(r[0]===hoy&&nrosZona.includes(r[1]?.trim())){
+        await sWrite(`Bultos!A${i+2}:F${i+2}`,[[hoy,r[1],r[2],'0','','']]);
+      }
+    }
+    // Limpiar pedidos de esta zona
+    const rowsP=await sRead('Pedidos!A2:D1000');
+    for(let i=0;i<rowsP.length;i++){
+      const r=rowsP[i];
+      if(r[0]===hoy&&nrosZona.includes(r[1]?.trim())){
+        await sWrite(`Pedidos!A${i+2}:D${i+2}`,[['','','','']]);
+      }
+    }
+    await lockRelease();
     nrosZona.forEach(nro=>{
-      // Limpiar todas las fechas de bultos de esta zona en state
-      Object.keys(state.bultos).forEach(k=>{ if(k.endsWith('|'+nro)){state.bultos[k]=0;state.comentarios[k]='';state.usuarios[k]='';} });
-      state.conPedido.delete(nro);
+      S.bultos[nro]=0; S.comentarios[nro]='';
+      S.usuarios[nro]=''; S.pedidos.delete(nro);
     });
-    renderTodo(); toast(`Zona "${zona}" limpiada`,'success');
-  }catch(e){await liberarLock();toast('Error: '+e.message,'error');}
+    renderTodo(); toast(`Zona "${zona}" limpiada`,'ok');
+  }catch(e){await lockRelease();toast('Error: '+e.message,'er');}
   hideLoading();
 }
 
-// ── CARGA EXCEL PEDIDOS ──
+// ═══════════════════════════════════════════════
+// CARGA EXCEL PEDIDOS
+// ═══════════════════════════════════════════════
 function cargarExcel(input){
-  const files=Array.from(input.files);
-  if(!files.length) return;
-  let totalNuevos=0,totalSumados=0,procesados=0;
-  const pedidosNuevos=[];
+  const files=Array.from(input.files); if(!files.length) return;
+  let totalN=0,totalS=0,proc=0;
+  const nuevos=[];
   files.forEach(file=>{
     const reader=new FileReader();
     reader.onload=e=>{
@@ -939,24 +935,24 @@ function cargarExcel(input){
           const colA=String(row[0]||'').trim();
           const colC=String(row[2]||'').trim();
           if(colA.toUpperCase().startsWith('CLIENTE')){
-            const match=colC.match(/\((\d+)\)\s*$/);
-            if(match){
-              const nro=match[1];
-              const cliente=state.clientes.find(c=>c.nro===nro);
-              const nombre=cliente?.nombre||colC;
-              if(!state.conPedido.has(nro)){state.conPedido.set(nro,1);totalNuevos++;pedidosNuevos.push([fechaHoy(),nro,nombre,'1']);}
-              else{const nc=state.conPedido.get(nro)+1;state.conPedido.set(nro,nc);pedidosNuevos.push([fechaHoy(),nro,nombre,nc.toString()]);}
-              totalSumados++;
-              registrarMovimiento(nro,nombre,cliente?.zona||'','pedido_detectado',null,'',state.usuario);
+            const m=colC.match(/\((\d+)\)\s*$/);
+            if(m){
+              const nro=m[1];
+              const cli=S.clientes.find(c=>c.nro===nro);
+              const nombre=cli?.nombre||colC;
+              if(!S.pedidos.has(nro)){S.pedidos.set(nro,1);totalN++;nuevos.push([hoyStr(),nro,nombre,'1']);}
+              else{const nc=S.pedidos.get(nro)+1;S.pedidos.set(nro,nc);nuevos.push([hoyStr(),nro,nombre,nc.toString()]);}
+              totalS++;
+              logMovimiento(nro,nombre,cli?.zona||'','pedido_detectado',null,'',S.usuario);
             }
           }
         });
-      }catch(err){toast('Error en '+file.name+': '+err.message,'error');}
-      procesados++;
-      if(procesados===files.length){
-        if(pedidosNuevos.length) guardarPedidosEnSheet(pedidosNuevos);
+      }catch(err){toast('Error en '+file.name+': '+err.message,'er');}
+      proc++;
+      if(proc===files.length){
+        if(nuevos.length) guardarPedidosSheet(nuevos);
         renderTodo();
-        toast(`${totalSumados} pedidos detectados (${totalNuevos} clientes) en ${files.length} archivo${files.length>1?'s':''}`,totalSumados>0?'success':'warning');
+        toast(`${totalS} pedidos (${totalN} clientes nuevos)`,totalS>0?'ok':'wa');
       }
     };
     reader.readAsArrayBuffer(file);
@@ -964,301 +960,267 @@ function cargarExcel(input){
   input.value='';
 }
 
-// ── GUARDAR PEDIDOS EN SHEET ──
-async function guardarPedidosEnSheet(pedidos){
+async function guardarPedidosSheet(pedidos){
   try{
-    await adquirirLock();
-    const hoy=fechaHoy();
-    const rows=await sheetsRead('Pedidos!A2:D1000');
-    const updates=[];const nuevos=[];
+    await lockAcquire();
+    const hoy=hoyStr();
+    const rows=await sRead('Pedidos!A2:D1000');
+    const upd=[]; const nuevos=[];
     pedidos.forEach(p=>{
       const nro=p[1],cant=parseInt(p[3])||1;
       const idx=rows.findIndex(r=>r[0]===hoy&&r[1]===nro);
-      if(idx>=0) updates.push({range:`Pedidos!A${idx+2}:D${idx+2}`,values:[[hoy,nro,p[2],cant.toString()]]});
+      if(idx>=0) upd.push({r:`Pedidos!A${idx+2}:D${idx+2}`,v:[[hoy,nro,p[2],cant.toString()]]});
       else nuevos.push([hoy,nro,p[2],cant.toString()]);
     });
-    for(const u of updates) await sheetsWrite(u.range,u.values);
-    if(nuevos.length) await sheetsAppend('Pedidos!A:D',nuevos);
-    await liberarLock();
-  }catch(e){await liberarLock();console.error('Error guardando pedidos:',e);}
+    for(const u of upd) await sWrite(u.r,u.v);
+    if(nuevos.length) await sAppend('Pedidos!A:D',nuevos);
+    await lockRelease();
+  }catch(e){await lockRelease();console.error('Error guardando pedidos:',e);}
 }
 
-// ── CLIENTE NUEVO ──
-function abrirModalCliente(zonaPrefill=''){
-  document.getElementById('fNroCliente').value='';
-  document.getElementById('fNombreCliente').value='';
-  const selZona=document.getElementById('fZonaCliente');
-  selZona.innerHTML=state.zonas.map(z=>`<option value="${z.nombre}" ${z.nombre===zonaPrefill?'selected':''}>${z.nombre}</option>`).join('');
-  actualizarSelectDespuesDe(zonaPrefill);
-  selZona.onchange=function(){actualizarSelectDespuesDe(this.value);};
-  abrirModal('modalCliente');
+// ═══════════════════════════════════════════════
+// CLIENTE NUEVO
+// ═══════════════════════════════════════════════
+function abrirModalCliente(zonaPre=''){
+  document.getElementById('fNro').value='';
+  document.getElementById('fNom').value='';
+  const sel=document.getElementById('fZona');
+  sel.innerHTML=S.zonas.map(z=>`<option value="${z.nombre}" ${z.nombre===zonaPre?'selected':''}>${z.nombre}</option>`).join('');
+  actualizarSelectDespues(zonaPre);
+  sel.onchange=function(){actualizarSelectDespues(this.value);};
+  abrirModal('mCliente');
 }
-
-function actualizarSelectDespuesDe(zona){
-  const sel=document.getElementById('fDespuesDe');
-  const cliZona=state.clientes.filter(c=>c.zona===zona).sort((a,b)=>a.orden-b.orden);
-  sel.innerHTML='<option value="0">— Al principio de la zona —</option>'+
-    cliZona.map(c=>`<option value="${c.orden}">${c.orden}. ${c.nombre}</option>`).join('');
+function actualizarSelectDespues(zona){
+  const sel=document.getElementById('fDespues');
+  const cz=S.clientes.filter(c=>c.zona===zona).sort((a,b)=>a.orden-b.orden);
+  sel.innerHTML='<option value="0">— Al principio —</option>'+
+    cz.map(c=>`<option value="${c.orden}">${c.orden}. ${c.nombre}</option>`).join('');
 }
-
 async function guardarCliente(){
-  const nro=document.getElementById('fNroCliente').value.trim();
-  const nombre=document.getElementById('fNombreCliente').value.trim();
-  const zona=document.getElementById('fZonaCliente').value;
-  const despuesDe=parseInt(document.getElementById('fDespuesDe').value)||0;
-  if(!nro||!nombre){toast('Completá N° cliente y nombre','warning');return;}
-  if(state.clientes.find(c=>c.nro===nro)){toast('Ya existe ese N° de cliente','warning');return;}
-
+  const nro=document.getElementById('fNro').value.trim();
+  const nombre=document.getElementById('fNom').value.trim();
+  const zona=document.getElementById('fZona').value;
+  const despues=parseInt(document.getElementById('fDespues').value)||0;
+  if(!nro||!nombre){toast('Completá N° y nombre','wa');return;}
+  if(S.clientes.find(c=>c.nro===nro)){toast('Ya existe ese N° de cliente','wa');return;}
   showLoading('Guardando cliente...');
   try{
-    await adquirirLock();
-    // Leer clientes actuales del Sheet para reescribir con nuevo orden
-    const rows=await sheetsRead('Clientes!A2:D500');
+    await lockAcquire();
+    const rows=await sRead('Clientes!A2:D500');
     const todos=rows.filter(r=>r[2]).map((r,i)=>({
-      orden:parseInt(r[0])||i+1, nro:r[1]?.trim()||'', nombre:r[2]?.trim()||'', zona:r[3]?.trim()||''
+      orden:parseInt(r[0])||i+1,nro:r[1]?.trim()||'',nombre:r[2]?.trim()||'',zona:r[3]?.trim()||''
     })).sort((a,b)=>a.orden-b.orden);
-
-    // Insertar en posición correcta
-    let insertPos;
-    if(despuesDe===0){
-      // Al principio de la zona
-      const primeroDeLaZona=todos.find(c=>c.zona===zona);
-      insertPos=primeroDeLaZona?primeroDeLaZona.orden-0.5:todos.length+1;
-    } else {
-      insertPos=despuesDe+0.5;
-    }
+    const insertPos=despues===0
+      ?(todos.find(c=>c.zona===zona)?.orden-0.5||todos.length+1)
+      :despues+0.5;
     todos.push({orden:insertPos,nro,nombre,zona});
     todos.sort((a,b)=>a.orden-b.orden);
-    // Reasignar órdenes consecutivos
     const nuevos=todos.map((c,i)=>[(i+1).toString(),c.nro,c.nombre,c.zona]);
-    await sheetsClear('Clientes!A2:D500');
-    if(nuevos.length) await sheetsWrite('Clientes!A2:D'+(nuevos.length+1),nuevos);
-    await liberarLock();
-    cerrarModal('modalCliente');
-    toast('Cliente agregado','success');
+    await sClear('Clientes!A2:D500');
+    if(nuevos.length) await sWrite('Clientes!A2:D'+(nuevos.length+1),nuevos);
+    await lockRelease();
+    cerrarModal('mCliente');
+    toast('Cliente agregado','ok');
     await cargarDatos();
-  }catch(e){await liberarLock();toast('Error: '+e.message,'error');}
+  }catch(e){await lockRelease();toast('Error: '+e.message,'er');}
   hideLoading();
 }
 
-// ── EDITAR CLIENTE ──
+// ═══════════════════════════════════════════════
+// EDITAR CLIENTE
+// ═══════════════════════════════════════════════
 function abrirEditarCliente(rowIndex,nro,nombre,zona,orden){
-  document.getElementById('eRowIndex').value=rowIndex;
-  document.getElementById('eOrdenOriginal').value=orden;
-  document.getElementById('eNroCliente').value=nro;
-  document.getElementById('eNombreCliente').value=nombre;
-  document.getElementById('eZonaCliente').innerHTML=
-    state.zonas.map(z=>`<option value="${z.nombre}" ${z.nombre===zona?'selected':''}>${z.nombre}</option>`).join('');
-  abrirModal('modalEditarCliente');
+  document.getElementById('eRowIdx').value=rowIndex;
+  document.getElementById('eOrden').value=orden;
+  document.getElementById('eNro').value=nro;
+  document.getElementById('eNom').value=nombre;
+  document.getElementById('eZona').innerHTML=
+    S.zonas.map(z=>`<option value="${z.nombre}" ${z.nombre===zona?'selected':''}>${z.nombre}</option>`).join('');
+  abrirModal('mEditCliente');
 }
 async function actualizarCliente(){
-  const rowIndex=parseInt(document.getElementById('eRowIndex').value);
-  const nro=document.getElementById('eNroCliente').value.trim();
-  const nombre=document.getElementById('eNombreCliente').value.trim();
-  const zona=document.getElementById('eZonaCliente').value;
-  if(!nro||!nombre){toast('Completá todos los campos','warning');return;}
+  const rowIndex=parseInt(document.getElementById('eRowIdx').value);
+  const orden=document.getElementById('eOrden').value;
+  const nro=document.getElementById('eNro').value.trim();
+  const nombre=document.getElementById('eNom').value.trim();
+  const zona=document.getElementById('eZona').value;
+  if(!nro||!nombre){toast('Completá todos los campos','wa');return;}
   showLoading('Actualizando...');
   try{
-    await adquirirLock();
-    const orden=document.getElementById('eOrdenOriginal').value;
-    await sheetsWrite(`Clientes!A${rowIndex}:D${rowIndex}`,[[orden,nro,nombre,zona]]);
-    await liberarLock();
-    const c=state.clientes.find(x=>x.rowIndex===rowIndex);
+    await lockAcquire();
+    await sWrite(`Clientes!A${rowIndex}:D${rowIndex}`,[[orden,nro,nombre,zona]]);
+    await lockRelease();
+    const c=S.clientes.find(x=>x.rowIndex===rowIndex);
     if(c){c.nro=nro;c.nombre=nombre;c.zona=zona;}
-    cerrarModal('modalEditarCliente');toast('Cliente actualizado','success');renderTodo();
-  }catch(e){await liberarLock();toast('Error: '+e.message,'error');}
+    cerrarModal('mEditCliente');toast('Cliente actualizado','ok');renderTodo();
+  }catch(e){await lockRelease();toast('Error: '+e.message,'er');}
   hideLoading();
 }
 
-// ── GESTOR ZONAS ──
-function abrirGestorZona(){renderGestorLista();abrirModal('modalZona');}
-function renderGestorLista(){
-  document.getElementById('gestorLista').innerHTML=state.zonas.map((z,i)=>`
-    <div class="gestor-item" style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--borde)">
-      <input type="text" value="${z.nombre}" style="flex:1;padding:5px 8px;border:1px solid var(--borde);border-radius:5px;font-size:13px;outline:none">
-      <button class="btn btn-danger btn-sm" onclick="eliminarZonaGestor(${i})">✕</button>
+// ═══════════════════════════════════════════════
+// GESTOR ZONAS
+// ═══════════════════════════════════════════════
+function abrirGestorZona(){renderGLista();abrirModal('mZonas');}
+function renderGLista(){
+  document.getElementById('gLista').innerHTML=S.zonas.map((z,i)=>`
+    <div class="gitem">
+      <span style="color:var(--sub);font-size:11px;min-width:18px">${i+1}</span>
+      <input type="text" value="${z.nombre}">
+      <button class="btn btn-d btn-sm" onclick="elimZona(${i})">✕</button>
     </div>`).join('');
 }
-function agregarZonaGestor(){state.zonas.push({nombre:'Nueva zona'});renderGestorLista();}
-function eliminarZonaGestor(idx){
-  if(state.clientes.some(c=>c.zona===state.zonas[idx].nombre)){toast('Tiene clientes asignados','warning');return;}
-  state.zonas.splice(idx,1);renderGestorLista();
+function agregarZona(){S.zonas.push({nombre:'Nueva zona'});renderGLista();}
+function elimZona(i){
+  if(S.clientes.some(c=>c.zona===S.zonas[i].nombre)){toast('Tiene clientes asignados','wa');return;}
+  S.zonas.splice(i,1);renderGLista();
 }
-async function guardarZonasGestor(){
-  const inputs=document.querySelectorAll('#gestorLista input[type="text"]');
+async function guardarZonas(){
+  const inputs=document.querySelectorAll('#gLista input[type="text"]');
   const nuevas=Array.from(inputs).map(inp=>({nombre:inp.value.trim()})).filter(z=>z.nombre);
   showLoading('Guardando zonas...');
   try{
-    await adquirirLock();
-    await sheetsClear('Zonas!A2:B100');
-    if(nuevas.length) await sheetsWrite('Zonas!A2:B'+(nuevas.length+1),nuevas.map((z,i)=>[(i+1).toString(),z.nombre]));
-    await liberarLock();
-    state.zonas=nuevas;cerrarModal('modalZona');toast('Zonas guardadas','success');renderTodo();
-  }catch(e){await liberarLock();toast('Error: '+e.message,'error');}
+    await lockAcquire();
+    await sClear('Zonas!A2:B100');
+    if(nuevas.length) await sWrite('Zonas!A2:B'+(nuevas.length+1),nuevas.map((z,i)=>[(i+1).toString(),z.nombre]));
+    await lockRelease();
+    S.zonas=nuevas;cerrarModal('mZonas');toast('Zonas guardadas','ok');renderTodo();
+  }catch(e){await lockRelease();toast('Error: '+e.message,'er');}
   hideLoading();
 }
 
-// ── IMPRESIÓN POR ZONA ──
+// ═══════════════════════════════════════════════
+// IMPRESIÓN
+// ═══════════════════════════════════════════════
 function imprimirZona(zona,event){
   event.stopPropagation();
-  const cliZona=state.clientes.filter(c=>c.zona===zona);
-  const bZona=cliZona.reduce((s,c)=>s+(state.bultos[bKey(c.nro)]||0),0);
-  if(bZona===0){toast('No hay bultos cargados en esta zona','warning');return;}
-
-  // Marcar solo la zona a imprimir
-  document.querySelectorAll('.zona-card').forEach(card=>{
-    card.classList.remove('imprimiendo');
-    if(card.dataset.zona===zona) card.classList.add('imprimiendo');
+  const cz=S.clientes.filter(c=>c.zona===zona);
+  const bz=cz.reduce((s,c)=>s+(S.bultos[c.nro]||0),0);
+  if(bz===0){toast('No hay bultos en esta zona','wa');return;}
+  document.querySelectorAll('.zcard').forEach(card=>{
+    card.classList.remove('printing');
+    if(card.dataset.zona===zona) card.classList.add('printing');
   });
-
-  document.getElementById('printFecha').textContent='Fecha: '+fechaLarga();
-  document.getElementById('printZona').textContent='Zona: '+zona;
-  document.getElementById('printChofer').textContent=state.choferes[zona]?'Chofer: '+state.choferes[zona]:'';
-  const tp=cliZona.filter(c=>(state.bultos[bKey(c.nro)]||0)>0).length;
-  document.getElementById('printTotales').textContent=`Total: ${bZona} bultos | ${tp} pedidos`;
-
+  document.getElementById('ph-fecha').textContent='Fecha: '+fechaLarga();
+  document.getElementById('ph-zona').textContent='Zona: '+zona;
+  document.getElementById('ph-chofer').textContent=S.choferes[zona]?'Chofer: '+S.choferes[zona]:'';
+  const tp=cz.filter(c=>(S.bultos[c.nro]||0)>0).length;
+  document.getElementById('ph-tots').textContent=`Total: ${bz} bultos | ${tp} pedidos`;
   window.print();
-
-  // Remover marca de impresión después
-  setTimeout(()=>document.querySelectorAll('.zona-card').forEach(card=>card.classList.remove('imprimiendo')),500);
+  setTimeout(()=>document.querySelectorAll('.zcard').forEach(c=>c.classList.remove('printing')),500);
 }
 
-// ── PANEL CONSULTA ──
+function imprimirTodo(){
+  // Imprimir todas las zonas con bultos
+  const zonasConBultos=S.zonas.filter(z=>
+    S.clientes.filter(c=>c.zona===z.nombre).some(c=>(S.bultos[c.nro]||0)>0)
+  );
+  if(!zonasConBultos.length){toast('No hay bultos cargados','wa');return;}
+  document.querySelectorAll('.zcard').forEach(card=>{
+    const zona=card.dataset.zona;
+    const tieneB=S.clientes.filter(c=>c.zona===zona).some(c=>(S.bultos[c.nro]||0)>0);
+    card.classList.toggle('printing',tieneB);
+  });
+  document.getElementById('ph-fecha').textContent='Fecha: '+fechaLarga();
+  document.getElementById('ph-zona').textContent='Todas las zonas';
+  document.getElementById('ph-chofer').textContent='';
+  const tb=Object.values(S.bultos).reduce((s,b)=>s+b,0);
+  document.getElementById('ph-tots').textContent=`Total: ${tb} bultos`;
+  window.print();
+  setTimeout(()=>document.querySelectorAll('.zcard').forEach(c=>c.classList.remove('printing')),500);
+}
+
+// ═══════════════════════════════════════════════
+// PANEL CONSULTA
+// ═══════════════════════════════════════════════
 function abrirPanel(){
-  document.getElementById('panelFecha').textContent=fechaLarga();
+  document.getElementById('pFecha').textContent=fechaLarga();
   let tb=0,tp=0;
-  const lista=state.zonas.map(zona=>{
-    const clis=state.clientes.filter(c=>c.zona===zona.nombre&&(state.bultos[bKey(c.nro)]||0)>0)
-      .map(c=>({nombre:c.nombre,bultos:state.bultos[bKey(c.nro)]}));
-    const bZona=clis.reduce((s,c)=>s+c.bultos,0);
-    tb+=bZona;tp+=clis.length;
-    return{zona:zona.nombre,clis,bultos:bZona};
+  const lista=S.zonas.map(zona=>{
+    const clis=S.clientes.filter(c=>c.zona===zona.nombre&&(S.bultos[c.nro]||0)>0)
+      .map(c=>({nombre:c.nombre,bultos:S.bultos[c.nro]}));
+    const bz=clis.reduce((s,c)=>s+c.bultos,0);
+    tb+=bz;tp+=clis.length;
+    return{zona:zona.nombre,clis,bultos:bz};
   }).filter(e=>e.bultos>0);
-
-  document.getElementById('panelTotales').innerHTML=`
-    <div class="panel-total-card"><div class="num">${tb}</div><div class="lbl">Bultos totales</div></div>
-    <div class="panel-total-card"><div class="num">${tp}</div><div class="lbl">Pedidos</div></div>
-    <div class="panel-total-card"><div class="num">${lista.length}</div><div class="lbl">Zonas activas</div></div>`;
-  document.getElementById('panelZonasGrid').innerHTML=lista.map(e=>`
-    <div class="panel-zona-card">
+  document.getElementById('pTots').innerHTML=`
+    <div class="ptcard"><div class="n">${tb}</div><div class="l">Bultos totales</div></div>
+    <div class="ptcard"><div class="n">${tp}</div><div class="l">Pedidos</div></div>
+    <div class="ptcard"><div class="n">${lista.length}</div><div class="l">Zonas activas</div></div>`;
+  document.getElementById('pGrid').innerHTML=lista.map(e=>`
+    <div class="pzcard">
       <h4>${e.zona}<span>${e.bultos}</span></h4>
-      ${e.clis.map(c=>`<div class="panel-cliente-row"><span class="pnombre">${c.nombre}</span><span class="pbultos">${c.bultos} bto</span></div>`).join('')}
-    </div>`).join('')||'<p style="color:#8ad0a0;padding:10px 0">No hay bultos cargados.</p>';
-  document.getElementById('panelConsulta').classList.add('open');
+      ${e.clis.map(c=>`<div class="prow"><span class="pn">${c.nombre}</span><span class="pb">${c.bultos}</span></div>`).join('')}
+    </div>`).join('')||'<p style="color:#8ad0a0">Sin bultos cargados.</p>';
+  document.getElementById('panel').classList.add('open');
 }
-function cerrarPanel(){document.getElementById('panelConsulta').classList.remove('open');}
+function cerrarPanel(){document.getElementById('panel').classList.remove('open');}
 
-// ── EXPORTAR EXCEL ──
+// ═══════════════════════════════════════════════
+// EXPORTAR EXCEL
+// ═══════════════════════════════════════════════
 function exportarExcel(){
   showLoading('Generando Excel...');
-  sheetsRead('Movimientos!A2:I5000').then(rows=>{
-    const hoy=fechaHoy();
-    const delDia=rows.filter(r=>r[0]===hoy);
-    if(!delDia.length){toast('No hay movimientos registrados hoy','warning');hideLoading();return;}
-    const headers=['fecha','hora','nro_cliente','nombre','zona','tipo_evento','bultos','comentario','usuario'];
-    const ws=XLSX.utils.aoa_to_sheet([headers,...delDia]);
+  sRead('Movimientos!A2:I5000').then(rows=>{
+    const hoy=hoyStr();
+    const d=rows.filter(r=>r[0]===hoy);
+    if(!d.length){toast('Sin movimientos hoy','wa');hideLoading();return;}
+    const ws=XLSX.utils.aoa_to_sheet([
+      ['fecha','hora','nro_cliente','nombre','zona','tipo_evento','bultos','comentario','usuario'],
+      ...d
+    ]);
     const wb=XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb,ws,'Movimientos');
-    const d=new Date();
-    const nombre=`HR-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}.xlsx`;
-    XLSX.writeFile(wb,nombre);
-    toast('Excel exportado: '+nombre,'success');
+    const now=new Date();
+    const fn=`HR-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}.xlsx`;
+    XLSX.writeFile(wb,fn);
+    toast('Exportado: '+fn,'ok');
     hideLoading();
-  }).catch(e=>{toast('Error al exportar: '+e.message,'error');hideLoading();});
+  }).catch(e=>{toast('Error: '+e.message,'er');hideLoading();});
 }
 
-// ── REGISTRO MOVIMIENTOS ──
-async function registrarMovimiento(nro,nombre,zona,tipoEvento,bultos,comentario,usuario){
+// ═══════════════════════════════════════════════
+// LOG MOVIMIENTOS
+// ═══════════════════════════════════════════════
+async function logMovimiento(nro,nombre,zona,tipo,bultos,comentario,usuario){
   const d=new Date();
-  const fecha=fechaHoy();
   const hora=`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
-  const fila=[fecha,hora,nro,nombre,zona,tipoEvento,bultos!==null&&bultos!==undefined?bultos.toString():'',comentario||'',usuario||''];
-  try{await sheetsAppend('Movimientos!A:I',[fila]);}catch(e){console.error('Error registrando movimiento:',e);}
+  const fila=[hoyStr(),hora,nro,nombre,zona,tipo,bultos!==null&&bultos!==undefined?bultos.toString():'',comentario||'',usuario||''];
+  try{await sAppend('Movimientos!A:I',[fila]);}catch(e){console.error('Log error:',e);}
 }
 
-// ── UTILIDADES ──
-function renderResumen(){
-  let tb=0,tp=0;const zs=new Set();
-  state.clientes.forEach(c=>{
-    const b=state.bultos[bKey(c.nro)]||0;
-    if(b>0){tb+=b;tp++;zs.add(c.zona);}
-  });
-  document.getElementById('rTotalBultos').textContent=tb;
-  document.getElementById('rTotalPedidos').textContent=tp;
-  document.getElementById('rTotalZonas').textContent=zs.size;
+// ═══════════════════════════════════════════════
+// UTILIDADES
+// ═══════════════════════════════════════════════
+function hoyStr(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
-function fechaHoy(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-function fechaLarga(){return new Date().toLocaleDateString('es-AR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
+function fechaLarga(){
+  return new Date().toLocaleDateString('es-AR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
 function setStatus(tipo,texto){
-  document.getElementById('statusBadge').className='status-badge '+(tipo==='conectando'?'':tipo);
-  document.getElementById('statusText').textContent=texto;
+  document.getElementById('sbadge').className='sbadge '+(tipo==='conectando'?'':tipo);
+  document.getElementById('stxt').textContent=texto;
 }
 function abrirModal(id){document.getElementById(id).classList.add('open');}
 function cerrarModal(id){document.getElementById(id).classList.remove('open');}
-function showLoading(msg='Procesando...'){document.getElementById('loadingMsg').textContent=msg;document.getElementById('loadingOverlay').classList.add('open');}
-function hideLoading(){document.getElementById('loadingOverlay').classList.remove('open');}
-function toast(msg,tipo='info'){
-  const c=document.getElementById('toastContainer'),t=document.createElement('div');
+function showLoading(msg='Procesando...'){document.getElementById('lmsg').textContent=msg;document.getElementById('loverlay').classList.add('open');}
+function hideLoading(){document.getElementById('loverlay').classList.remove('open');}
+function toast(msg,tipo=''){
+  const c=document.getElementById('tc'),t=document.createElement('div');
   t.className='toast '+tipo;
-  t.innerHTML=`<span>${{success:'✅',error:'❌',warning:'⚠️',info:'ℹ️'}[tipo]||''}</span><span>${msg}</span>`;
+  const ico={ok:'✅',er:'❌',wa:'⚠️'}[tipo]||'ℹ️';
+  t.innerHTML=`<span>${ico}</span><span>${msg}</span>`;
   c.appendChild(t);setTimeout(()=>t.remove(),5000);
 }
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
-// Sincronizar datos sin rerenderizar
-async function sincronizarDatos(){
-  try{
-    const [rBul,rPed]=await Promise.all([
-      sheetsRead('Bultos!A2:F1000'),
-      sheetsRead('Pedidos!A2:D1000'),
-    ]);
-    const hoy=fechaHoy();
-    const fechasEnSheet=[...new Set(rBul.filter(r=>r[0]).map(r=>r[0].trim()))];
-    const hayDatosDeHoy=fechasEnSheet.includes(hoy);
-    const fechaACargar=hayDatosDeHoy?hoy:(fechasEnSheet[fechasEnSheet.length-1]||hoy);
-    const activo=document.activeElement;
-    const nroActivo=activo?.dataset?.nro;
-    rBul.forEach(r=>{
-      if(r[0]===fechaACargar&&r[1]){
-        const nro=r[1].trim();
-        const k=fechaACargar+'|'+nro;
-        const bNuevo=parseInt(r[3])||0;
-        const comNuevo=r[4]?.trim()||'';
-        if(nro!==nroActivo){
-          state.bultos[k]=bNuevo;
-          state.comentarios[k]=comNuevo;
-          state.usuarios[k]=r[5]?.trim()||'';
-          const inputs=document.querySelectorAll(`[data-nro="${nro}"]`);
-          inputs.forEach(inp=>{
-            if(inp.classList.contains('input-bultos')){
-              inp.value=bNuevo>0?bNuevo:'';
-              inp.classList.toggle('tiene-valor',bNuevo>0);
-              const tr=inp.closest('tr');
-              if(tr) tr.className=bNuevo>0?'highlight':(state.conPedido.has(nro)?'con-pedido':'sin-bultos');
-            }
-            if(inp.classList.contains('input-comentario')){
-              inp.value=comNuevo;
-              inp.classList.toggle('tiene-valor',!!comNuevo);
-            }
-          });
-        }
-      }
-    });
-    const nuevosPedidos=new Map();
-    rPed.forEach(r=>{ if(r[0]===hoy&&r[1]) nuevosPedidos.set(r[1].trim(),parseInt(r[3])||1); });
-    state.conPedido=nuevosPedidos;
-    renderResumen();
-  }catch(e){ /* silencioso */ }
-}
-
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
 async function init(){
   await cargarDatos();
-  setInterval(async()=>{
-    const activo=document.activeElement;
-    const esInput=activo&&(activo.tagName==='INPUT'||activo.tagName==='TEXTAREA');
-    if(esInput){ await sincronizarDatos(); }
-    else { await cargarDatos(); }
-  }, CONFIG.REFRESH_MS);
+  setInterval(autoRefresh, CFG.REFRESH);
 }
 init();
 </script>
