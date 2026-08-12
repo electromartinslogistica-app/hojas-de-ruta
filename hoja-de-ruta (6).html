@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoja de Ruta — Electro Martin's</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root {
+    --azul:       #1a2e4a;
+    --azul-med:   #2c4a6e;
+    --azul-light: #3d6494;
+    --acento:     #e8a020;
+    --acento-dark:#c4851a;
+    --bg:         #f0f4f8;
+    --bg-card:    #ffffff;
+    --texto:      #1a2e4a;
+    --texto-sub:  #5a7a9a;
+    --borde:      #d0dce8;
+    --verde:      #2e7d52;
+    --verde-light:#e8f5ee;
+    --rojo:       #c0392b;
+    --amarillo:   #f39c12;
+    --radio:      8px;
+    --sombra:     0 2px 8px rgba(26,46,74,0.10);
+    --sombra-med: 0 4px 16px rgba(26,46,74,0.15);
+    --toolbar-h:  108px; /* header 56 + toolbar 52 */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--texto); font-size: 14px; min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--azul); color: white; padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-brand { display: flex; align-items: center; gap: 10px; }
+  .header-brand .bolt { font-size: 22px; }
+  .header-brand h1 { font-size: 17px; font-weight: 700; }
+  .header-brand span { font-size: 12px; color: #8ab0d0; }
+  .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .status-badge {
+    display: flex; align-items: center; gap: 6px; padding: 5px 12px;
+    border-radius: 20px; font-size: 12px; font-weight: 600;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s;
+  }
+  .status-badge.libre   { background: rgba(46,125,82,0.3);  border-color: rgba(46,125,82,0.5); }
+  .status-badge.ocupado { background: rgba(243,156,18,0.3); border-color: rgba(243,156,18,0.5); }
+  .status-badge.error   { background: rgba(192,57,43,0.3);  border-color: rgba(192,57,43,0.5); }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #8ab0d0; }
+  .status-badge.libre   .status-dot { background: #4caf50; box-shadow: 0 0 6px #4caf50; }
+  .status-badge.ocupado .status-dot { background: #f39c12; animation: pulso 1s infinite; }
+  .status-badge.error   .status-dot { background: #e74c3c; }
+  @keyframes pulso { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .btn-header {
+    background: var(--acento); color: white; border: none; padding: 7px 12px;
+    border-radius: var(--radio); font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 4px;
+  }
+  .btn-header:hover { background: var(--acento-dark); }
+  .usuario-badge {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px; padding: 4px 10px; font-size: 12px; color: #c8ddf0;
+    display: none; align-items: center; gap: 5px;
+  }
+
+  /* ── TOOLBAR fija ── */
+  .toolbar {
+    background: white; border-bottom: 1px solid var(--borde);
+    padding: 8px 24px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    position: sticky; top: 56px; z-index: 99; box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+  .resumen-bar {
+    background: var(--azul); color: white;
+    padding: 8px 24px; display: flex; gap: 20px; flex-wrap: wrap;
+    position: sticky; top: 108px; z-index: 98;
+  }
+
+  .search-box {
+    display: flex; align-items: center; background: var(--bg);
+    border: 1px solid var(--borde); border-radius: var(--radio);
+    padding: 5px 10px; gap: 6px; min-width: 180px; max-width: 240px;
+  }
+  .search-box input { border: none; background: transparent; outline: none; font-size: 13px; color: var(--texto); width: 100%; }
+  .chofer-wrap {
+    display: flex; align-items: center; gap: 6px; background: var(--bg);
+    border: 1px solid var(--borde); border-radius: var(--radio); padding: 5px 10px;
+  }
+  .chofer-wrap label { font-size: 12px; font-weight: 600; color: var(--texto-sub); white-space: nowrap; }
+  .chofer-wrap input { border: none; background: transparent; outline: none; font-size: 13px; font-weight: 600; color: var(--texto); width: 140px; }
+  .chofer-wrap input::placeholder { color: #aac; font-weight: 400; }
+
+  .btn {
+    display: flex; align-items: center; gap: 5px; padding: 6px 12px;
+    border-radius: var(--radio); border: none; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; white-space: nowrap;
+  }
+  .btn-primary   { background: var(--azul);   color: white; }
+  .btn-primary:hover   { background: var(--azul-med); }
+  .btn-secondary { background: white; color: var(--azul); border: 1px solid var(--borde); }
+  .btn-secondary:hover { background: var(--bg); }
+  .btn-success   { background: var(--verde);  color: white; }
+  .btn-success:hover   { background: #235f3e; }
+  .btn-warning   { background: var(--acento); color: white; }
+  .btn-warning:hover   { background: var(--acento-dark); }
+  .btn-danger    { background: var(--rojo);   color: white; }
+  .btn-sm { padding: 4px 10px; font-size: 11px; }
+  .toolbar-sep { width: 1px; height: 26px; background: var(--borde); }
+  .spacer { flex: 1; }
+
+  /* ── RESUMEN ── */
+  .resumen-item { display: flex; align-items: baseline; gap: 5px; }
+  .resumen-item .num { font-size: 20px; font-weight: 700; color: var(--acento); }
+  .resumen-item .lbl { font-size: 11px; color: #8ab0d0; text-transform: uppercase; letter-spacing: 0.4px; }
+
+  /* ── MAIN ── */
+  .main { padding: 16px 24px; max-width: 1100px; margin: 0 auto; }
+
+  /* ── CARD EXPRESO ── */
+  .expreso-card {
+    background: var(--bg-card); border: 1px solid var(--borde);
+    border-radius: 10px; margin-bottom: 14px; box-shadow: var(--sombra); overflow: hidden;
+  }
+  .expreso-header {
+    background: var(--azul-med); color: white; padding: 9px 14px;
+    display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;
+  }
+  .expreso-num {
+    background: var(--acento); color: white; font-size: 11px; font-weight: 700;
+    padding: 2px 8px; border-radius: 12px; min-width: 26px; text-align: center;
+  }
+  .expreso-nombre { font-size: 14px; font-weight: 700; flex: 1; }
+  .expreso-resumen { display: flex; gap: 14px; align-items: center; font-size: 12px; color: #8ab0d0; }
+  .expreso-resumen strong { color: var(--acento); font-size: 13px; }
+  .expreso-chevron { transition: transform 0.2s; font-size: 11px; color: #8ab0d0; }
+  .expreso-card.collapsed .expreso-chevron { transform: rotate(-90deg); }
+  .expreso-body { padding: 0; }
+  .expreso-card.collapsed .expreso-body { display: none; }
+
+  /* ── TABLA ── */
+  .tabla-clientes { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .col-nro     { width: 90px; }
+  .col-nombre  { width: auto; }
+  .col-bultos  { width: 80px; }
+  .col-coment  { width: 200px; }
+  .col-usuario { width: 90px; }
+  .col-acciones{ width: 36px; }
+  .col-check   { width: 28px; }
+
+  .tabla-clientes th {
+    background: #f8fafc; color: var(--texto-sub); font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.4px; padding: 7px 10px;
+    text-align: left; border-bottom: 1px solid var(--borde); overflow: hidden;
+  }
+  .tabla-clientes td { padding: 6px 10px; border-bottom: 1px solid #f0f4f8; vertical-align: middle; overflow: hidden; }
+  .tabla-clientes tr:last-child td { border-bottom: none; }
+  .tabla-clientes tr:hover td { background: #f8fafc; }
+  .tabla-clientes tr.highlight td { background: #fffbf0; }
+  .tabla-clientes tr.con-pedido td { background: #f0f8ff; }
+  .tabla-clientes tr.con-pedido:hover td { background: #e8f4ff; }
+
+  .cliente-nro    { font-size: 12px; color: var(--texto-sub); font-family: monospace; }
+  .cliente-nombre { font-weight: 600; color: var(--texto); }
+  .pedido-badge {
+    display: inline-block; background: #dbeafe; color: #1e40af;
+    font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 10px; margin-left: 5px;
+  }
+
+  .input-bultos {
+    width: 64px; padding: 4px 6px; border: 1px solid var(--borde);
+    border-radius: 5px; font-size: 14px; font-weight: 600;
+    text-align: center; color: var(--texto); outline: none; transition: border-color 0.2s;
+  }
+  .input-bultos:focus { border-color: var(--azul-light); box-shadow: 0 0 0 2px rgba(61,100,148,0.15); }
+  .input-bultos.tiene-valor { border-color: var(--verde); background: var(--verde-light); color: var(--verde); }
+
+  .input-comentario {
+    width: 100%; padding: 4px 6px; border: 1px solid transparent;
+    border-radius: 5px; font-size: 12px; color: var(--texto); outline: none; background: transparent;
+  }
+  .input-comentario:focus { border-color: var(--azul-light); background: white; }
+  .input-comentario.tiene-valor { color: #7a5f00; }
+
+  .usuario-col-td { font-size: 11px; color: var(--texto-sub); font-style: italic; }
+
+  .btn-edit-cliente {
+    background: none; border: none; cursor: pointer; color: var(--texto-sub);
+    font-size: 13px; padding: 2px 5px; border-radius: 4px; transition: all 0.2s;
+  }
+  .btn-edit-cliente:hover { background: var(--bg); color: var(--azul); }
+
+  .expreso-footer {
+    background: #f8fafc; border-top: 1px solid var(--borde);
+    padding: 7px 14px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .btn-add-cliente {
+    background: none; border: 1px dashed var(--borde); color: var(--azul-light);
+    font-size: 12px; padding: 3px 10px; border-radius: 5px; cursor: pointer;
+    transition: all 0.2s; display: flex; align-items: center; gap: 4px;
+  }
+  .btn-add-cliente:hover { border-color: var(--azul); color: var(--azul); background: var(--bg); }
+
+  /* ── MODALES ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: white; border-radius: 12px; padding: 24px; width: 100%; max-width: 420px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2); animation: slideUp 0.2s ease;
+  }
+  @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+  .modal h3 { font-size: 16px; font-weight: 700; color: var(--azul); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--texto-sub); margin-bottom: 5px; text-transform: uppercase; }
+  .form-group input, .form-group select {
+    width: 100%; padding: 8px 12px; border: 1px solid var(--borde);
+    border-radius: var(--radio); font-size: 14px; color: var(--texto); outline: none;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--azul-light); }
+  .modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+  .modal-inicio { max-width: 360px; text-align: center; }
+  .modal-inicio .ico-grande { font-size: 48px; margin-bottom: 12px; }
+  .modal-inicio h3 { justify-content: center; font-size: 18px; }
+  .modal-inicio p { font-size: 13px; color: var(--texto-sub); margin-bottom: 16px; }
+  .modal-confirm .aviso {
+    background: #fff8e1; border: 1px solid #f39c12; border-radius: 8px;
+    padding: 12px; margin-bottom: 16px; font-size: 13px; color: #7a5f00;
+  }
+
+  /* ── TOAST ── */
+  .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
+  .toast {
+    background: var(--azul); color: white; padding: 10px 14px;
+    border-radius: var(--radio); font-size: 13px; box-shadow: var(--sombra-med);
+    animation: fadeInUp 0.3s ease; display: flex; align-items: center; gap: 8px; max-width: 320px;
+  }
+  .toast.success { background: var(--verde); }
+  .toast.error   { background: var(--rojo); }
+  .toast.warning { background: var(--amarillo); color: var(--azul); }
+  @keyframes fadeInUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── LOADING ── */
+  .loading-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(26,46,74,0.7);
+    z-index: 400; align-items: center; justify-content: center; flex-direction: column; gap: 14px; color: white;
+  }
+  .loading-overlay.open { display: flex; }
+  .spinner { width: 38px; height: 38px; border: 3px solid rgba(255,255,255,0.3); border-top-color: var(--acento); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+
+  /* ── PANEL CONSULTA ── */
+  .panel-consulta { display: none; position: fixed; inset: 0; background: var(--azul); z-index: 500; overflow-y: auto; padding: 20px; }
+  .panel-consulta.open { display: block; }
+  .panel-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; gap: 10px; }
+  .panel-header h2 { color: white; font-size: 18px; line-height: 1.3; }
+  .panel-header .fecha { color: #8ab0d0; font-size: 12px; margin-top: 2px; }
+  .panel-totales { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+  .panel-total-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 14px 18px; flex: 1; min-width: 120px; }
+  .panel-total-card .num { font-size: 28px; font-weight: 700; color: var(--acento); }
+  .panel-total-card .lbl { font-size: 11px; color: #8ab0d0; text-transform: uppercase; }
+  .panel-expresos { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+  .panel-expreso-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 14px; }
+  .panel-expreso-card h4 { color: white; font-size: 13px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: baseline; }
+  .panel-expreso-card h4 span { color: var(--acento); font-size: 17px; font-weight: 700; }
+  .panel-cliente-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 12px; }
+  .panel-cliente-row:last-child { border-bottom: none; }
+  .panel-cliente-row .pnombre { color: #c8ddf0; flex: 1; padding-right: 8px; }
+  .panel-cliente-row .pbultos { color: var(--acento); font-weight: 700; white-space: nowrap; }
+
+  /* Responsive panel */
+  @media (max-width: 600px) {
+    .panel-consulta { padding: 14px; }
+    .panel-header h2 { font-size: 15px; }
+    .panel-total-card { padding: 10px 12px; min-width: 90px; }
+    .panel-total-card .num { font-size: 22px; }
+    .panel-expresos { grid-template-columns: 1fr; }
+    .panel-expreso-card { padding: 10px 12px; }
+  }
+
+  /* ── GESTOR EXPRESOS ── */
+  .gestor-item { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--borde); }
+  .gestor-item:last-child { border-bottom: none; }
+  .gestor-item input { flex: 1; padding: 5px 8px; border: 1px solid var(--borde); border-radius: 5px; font-size: 13px; outline: none; }
+
+  /* ── NO RESULTADOS ── */
+  .no-resultados { text-align: center; padding: 40px; color: var(--texto-sub); }
+  .no-resultados .ico { font-size: 40px; margin-bottom: 10px; }
+
+  /* ── PRINT ── */
+  .print-header { display: none; }
+
+  @media print {
+    body { background: white; font-size: 10.5px; }
+
+    .header, .toolbar, .resumen-bar, .no-print,
+    .toast-container, .loading-overlay, .modal-overlay,
+    .panel-consulta, .btn, .btn-add-cliente, .btn-edit-cliente { display: none !important; }
+
+    .main { padding: 0; max-width: 100%; }
+
+    /* Solo expresos con bultos */
+    .expreso-card { box-shadow: none; margin-bottom: 6px; break-inside: avoid; border: 1px solid #aaa; }
+    .expreso-card.sin-bultos-print { display: none !important; }
+    .expreso-card.collapsed .expreso-body { display: block !important; }
+
+    /* Encabezado expreso sin color */
+    .expreso-header {
+      background: white !important; color: black !important;
+      border-bottom: 2px solid #222; padding: 5px 10px;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .expreso-num { background: white !important; color: black !important; border: 1px solid #333; font-size: 10px; }
+    .expreso-nombre { color: black !important; font-size: 12px; font-weight: 700; }
+    .expreso-resumen { color: #333 !important; }
+    .expreso-resumen strong { color: #333 !important; }
+    .expreso-chevron { display: none; }
+
+    /* Solo clientes con bultos */
+    .tabla-clientes tr.sin-bultos { display: none !important; }
+    .tabla-clientes tr.con-pedido:not(.highlight) { display: none !important; }
+
+    /* Anchos fijos para alineación */
+    .tabla-clientes { table-layout: fixed; width: 100%; border-collapse: collapse; }
+    .col-nro     { width: 70px; }
+    .col-nombre  { width: auto; }
+    .col-bultos  { width: 50px; }
+    .col-coment  { width: 180px; }
+    .col-usuario { display: none; }
+    .col-acciones{ display: none; }
+    .col-check   { width: 22px; }
+
+    .tabla-clientes th {
+      background: #ebebeb !important; color: #333 !important;
+      padding: 4px 8px; font-size: 9px; border-bottom: 1px solid #999;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .tabla-clientes td { padding: 4px 8px; border-bottom: 1px solid #ddd; }
+    .tabla-clientes tr.highlight td { background: white !important; }
+
+    /* NEGRITA en nro cliente y bultos */
+    .cliente-nro { font-weight: 700 !important; color: black !important; font-size: 10.5px; font-family: monospace; }
+    .cliente-nombre { font-weight: 600; font-size: 10.5px; color: black; }
+
+    /* Bultos: mostrar valor en negrita */
+    .input-bultos {
+      border: none !important; background: transparent !important;
+      font-weight: 700 !important; color: black !important;
+      font-size: 11px; width: auto; padding: 0; text-align: left;
+      -webkit-appearance: none; appearance: none;
+    }
+    /* Comentario: texto plano sin borde */
+    .input-comentario {
+      border: none !important; background: transparent !important;
+      color: #444; font-size: 10px; width: 100%; padding: 0;
+    }
+    /* Check box */
+    .check-print { width: 14px; height: 14px; border: 1.5px solid #555; display: inline-block; }
+
+    .pedido-badge { display: none; }
+    .usuario-col-td { display: none; }
+    .expreso-footer { display: none; }
+
+    /* Print header */
+    .print-header { display: block !important; margin-bottom: 12px; border-bottom: 2px solid #333; padding-bottom: 7px; }
+    .print-header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .print-header h2 { font-size: 14px; font-weight: 700; }
+    .ph-right { text-align: right; }
+    .ph-fecha  { font-size: 10px; }
+    .ph-chofer { font-size: 11px; font-weight: 700; margin-top: 2px; }
+    .ph-totales { font-size: 10px; color: #444; margin-top: 5px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PRINT HEADER -->
+<div class="print-header" id="printHeader">
+  <div class="print-header-top">
+    <h2>⚡ Electro Martin's — Hoja de Ruta</h2>
+    <div class="ph-right">
+      <div class="ph-fecha"  id="printFecha"></div>
+      <div class="ph-chofer" id="printChofer"></div>
+    </div>
+  </div>
+  <div class="ph-totales" id="printTotales"></div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-brand">
+    <span class="bolt">⚡</span>
+    <div><h1>Electro Martin's</h1><span>Hoja de Ruta</span></div>
+  </div>
+  <div class="header-right">
+    <div class="status-badge" id="statusBadge">
+      <div class="status-dot"></div>
+      <span id="statusText">Conectando...</span>
+    </div>
+    <div class="usuario-badge" id="usuarioBadge">👤 <span id="usuarioNombre"></span></div>
+    <button class="btn-header no-print" onclick="abrirPanel()">👁 Panel</button>
+    <button class="btn-header no-print" onclick="exportarExcel()">📊 Exportar Excel</button>
+    <button class="btn-header no-print" onclick="imprimir()">🖨 Imprimir</button>
+  </div>
+</header>
+
+<!-- TOOLBAR -->
+<div class="toolbar no-print">
+  <div class="search-box">
+    <span>🔍</span>
+    <input type="text" id="busqueda" placeholder="Buscar nombre o N° cliente..." oninput="filtrar()">
+  </div>
+  <div class="toolbar-sep"></div>
+  <div class="chofer-wrap">
+    <label>🚚 Chofer:</label>
+    <input type="text" id="choferGlobal" placeholder="Nombre del chofer..." onchange="guardarChoferGlobal(this.value)">
+  </div>
+  <div class="toolbar-sep"></div>
+  <button class="btn btn-success"   onclick="abrirModalCliente()">＋ Cliente</button>
+  <button class="btn btn-secondary" onclick="abrirGestorExpreso()">⚙ Expresos</button>
+  <label  class="btn btn-secondary" style="cursor:pointer">
+    📂 Cargar pedidos
+    <input type="file" id="inputExcel" accept=".xlsx,.xls" style="display:none" multiple onchange="cargarExcel(this)">
+  </label>
+  <div class="spacer"></div>
+  <button class="btn btn-secondary" onclick="cargarDatos()">↻ Actualizar</button>
+  <button class="btn btn-danger no-print" onclick="pedirResetTotal()">🗑 Resetear hoja</button>
+</div>
+
+<!-- RESUMEN -->
+<div class="resumen-bar no-print">
+  <div class="resumen-item"><span class="num" id="rTotalBultos">0</span><span class="lbl">bultos totales</span></div>
+  <div class="resumen-item"><span class="num" id="rTotalPedidos">0</span><span class="lbl">pedidos</span></div>
+  <div class="resumen-item"><span class="num" id="rTotalExpreso">0</span><span class="lbl">expresos activos</span></div>
+  <div class="resumen-item" id="resumenPendientes" style="display:none">
+    <span class="num" id="rPendientes" style="color:#f39c12">0</span><span class="lbl">pendientes sin bultos</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main" id="mainContent">
+  <div class="no-resultados"><div class="ico">⏳</div><p>Cargando datos...</p></div>
+</main>
+
+<!-- MODAL USUARIO -->
+<div class="modal-overlay open" id="modalUsuario">
+  <div class="modal modal-inicio">
+    <div class="ico-grande">⚡</div>
+    <h3>Electro Martin's</h3>
+    <p>Ingresá tu nombre para identificar tus registros.</p>
+    <div class="form-group">
+      <input type="text" id="fUsuario" placeholder="Tu nombre..." maxlength="30"
+        onkeydown="if(event.key==='Enter') confirmarUsuario()">
+    </div>
+    <div class="modal-btns" style="justify-content:center">
+      <button class="btn btn-primary" onclick="confirmarUsuario()" style="padding:10px 32px">Ingresar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RESET -->
+<div class="modal-overlay" id="modalReset">
+  <div class="modal modal-confirm">
+    <h3>📅 Datos del día anterior</h3>
+    <div class="aviso">Se encontraron datos cargados del día anterior. ¿Querés borrarlos para comenzar el día de hoy?</div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="cerrarModal('modalReset')">Mantener datos</button>
+      <button class="btn btn-danger"    onclick="confirmarResetManual()">Sí, borrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RESET TOTAL -->
+<div class="modal-overlay" id="modalResetTotal">
+  <div class="modal modal-confirm">
+    <h3>🗑 Resetear hoja completa</h3>
+    <div class="aviso">¿Querés borrar todos los bultos, comentarios, chofer y pedidos cargados? Esta acción no se puede deshacer.</div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="cerrarModal('modalResetTotal')">Cancelar</button>
+      <button class="btn btn-danger"    onclick="confirmarResetTotal()">Sí, resetear todo</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CLIENTE NUEVO -->
+<div class="modal-overlay" id="modalCliente">
+  <div class="modal">
+    <h3>👤 Agregar cliente nuevo</h3>
+    <div class="form-group"><label>N° Cliente</label><input type="text" id="fNroCliente" placeholder="ej: 1001"></div>
+    <div class="form-group"><label>Nombre</label><input type="text" id="fNombreCliente" placeholder="ej: García Juan"></div>
+    <div class="form-group"><label>Expreso</label><select id="fExpresoCliente"></select></div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="cerrarModal('modalCliente')">Cancelar</button>
+      <button class="btn btn-success"   onclick="guardarCliente()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR CLIENTE -->
+<div class="modal-overlay" id="modalEditarCliente">
+  <div class="modal">
+    <h3>✏️ Editar cliente</h3>
+    <input type="hidden" id="eRowIndex">
+    <div class="form-group"><label>N° Cliente</label><input type="text" id="eNroCliente"></div>
+    <div class="form-group"><label>Nombre</label><input type="text" id="eNombreCliente"></div>
+    <div class="form-group"><label>Expreso</label><select id="eExpresoCliente"></select></div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="cerrarModal('modalEditarCliente')">Cancelar</button>
+      <button class="btn btn-warning"   onclick="actualizarCliente()">Actualizar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GESTOR EXPRESOS -->
+<div class="modal-overlay" id="modalExpreso">
+  <div class="modal" style="max-width:460px">
+    <h3>⚙ Gestionar Expresos</h3>
+    <p style="font-size:12px;color:var(--texto-sub);margin-bottom:10px">El orden de la lista es el orden de recorrido e impresión.</p>
+    <div id="gestorLista" style="max-height:300px;overflow-y:auto;margin-bottom:10px"></div>
+    <button class="btn btn-success btn-sm" onclick="agregarExpresoGestor()">＋ Agregar expreso</button>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="cerrarModal('modalExpreso')">Cancelar</button>
+      <button class="btn btn-primary"   onclick="guardarExpresosGestor()">Guardar orden</button>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL CONSULTA -->
+<div class="panel-consulta" id="panelConsulta">
+  <div class="panel-header">
+    <div><h2>👁 Panel Consulta</h2><div class="fecha" id="panelFecha"></div></div>
+    <button class="btn btn-secondary" onclick="cerrarPanel()">✕ Cerrar</button>
+  </div>
+  <div class="panel-totales"  id="panelTotales"></div>
+  <div class="panel-expresos" id="panelExpresosGrid"></div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <span id="loadingMsg">Procesando...</span>
+</div>
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+const CONFIG = {
+  SHEET_ID: '1EigQ0CLhbk-59OELs4I_4a2g0eyGy5XKiPH9qz97qI0',
+  API_KEY:  'AIzaSyCQD9Yet5wKtKlRtLN7ldwQvMgvMe-92IM',
+  SA: {
+    client_email: 'hoja-de-ruta@hojaderutaexp2026.iam.gserviceaccount.com',
+    private_key: `-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQD1+rsIEw/IEDRa
+JIoUuodStzJ7f86HZ0HIE+6BBS4lFTHzz3DC0Pz7yeCSv411kKYqlR8VkK7qzrSj
+6wLWHAYclSqHucPs6pvX9Ovl2o0gg2dXUO7IuS9UVXtn6xGJckT6XcOLUXrOfP0W
+DOYWhOBPWXOdqYHLiwqKpNpUMjsIkuVBeH0iXXBdVTzuIbR/eQRsTzTczhLYfGJD
+mgifQxNzGnAcT/mOrvjUMaSUKkHluRb1O/gS6CSGt4QiVGgMGHMBqX/G88XHkhh7
+pXdjSKHBOqTyAEwNTdbr4lwguo6uqy1E1RaLUvpkhkm8h056Fb7UOUGVJ8KsQsFI
+4QLDYsb1AgMBAAECggEAMPr+Zzs0d0gSxKhl/n6uF6B3IvRuMbQz+x1M7tATQjsY
+OU5jS8fFuHWYjGAsUO6+x9ft2qN20Tbb7ZAMfooSBXsGfwRUqUaGRdh1aM2+MG06
+FL7+7WVCsW5cJnM+iLoCVkB5gbJ128wzsUJcRruq1uIfDZQFTnyfWsA84WsnKiuC
+HUnzYxnU/M/qmK2E4dbA22DScEJnoyjuNroEjZStzNY2t4tLnAGTaHPJlzRBU/Ff
+Z2T4SAnLJZ1l+F7PHpkxOJ8CcayYOTrpWJcQC75U2odoxStpUU/Xg/iAAntuVz+f
+AlQ/C01GqEGKqTmXWSCV+kXir0tlrJat4JpzQUL9eQKBgQD97D+nMyxREYnVCskO
+/6n+LvON0Rj+WiQPFhxqhE82HAGLvbHfDNKP6SB1hYdxdOAotFdZz7ZQbkc+yBiw
+Gvu/uVWy1969tIMRcwGm03EYjkEH3hvB1S/tErtHUwtSUAi45hJzFnXu+v0jD5A1
+Hd46KdVqGmW94CTSFIv4DFjU6wKBgQD3/djlXy4jhUsfh4mAR2/edECVuPJnhUc7
+Nm5ywojs9vlvdTdJ4EX1xEff8UrNdIWIWTXqtY84gZMAOin+sR2lPZKhzXpLt4ER
+juPA0DeRf/JKZqIRhai+0ALKW5qVLnTSGbk8FaMO1bL+1qBhnVicHEnFkNhI1DEw
+Yr0/19VbnwKBgQC4MI3/x+QGrlUv/5HW2mfCJOaw4ZNitZpggyZ7sZwP4QLSDfkf
+lhqLH41XElQsXZ5YiHCwijZyY3w0s0sNO5WP/m2GvIYrT+yfVLBHBiuMp2vOvDOg
+R/dq3eKRm1CkFcAt9148s3c6sj+7FggCL7dKs5vGSn2w3Q14gkUB2lr5nwKBgFt3
+eURActgPFcIvT3vM3WoDHr8aU+3yrm8ciGgzcCVWgnGlnhrVaXhYSNpEOP7Gd2nu
+3YAQLx78S6fNzCdwVCraJvcevnim2igLt90p7xTvSAJBEI296ptWRXE1kDJtzBCi
+BDwxDs8t6rMrnkPisQgDNwJzhhJ2kR3zjTG6/aqpAoGALaTY4nKK4Vi4LhMzDReU
+zZiL/kaO5b+AhFWDlYXJ4JQx92lukiHVks6Ov5oRjiXQw62eS/wB3T1asbvXcjUu
+yDgyzl+Hbpte3nYsV46ID8rubETCykj6/r/41RzhxeQqjaaMLysJi72NSr4mCFPf
+UqmNM1yjWnIv8Qc1/3x3U8c=
+-----END PRIVATE KEY-----`
+  },
+  REFRESH_MS:  15000,
+  LOCK_TTL_MS: 12000,
+};
+
+let state = {
+  expresos: [], clientes: [], bultos: {}, comentarios: {}, usuarios: {},
+  conPedido: new Map(), choferGlobal: '', usuario: '', tokenCache: null, tokenExp: 0,
+  resetModalMostrado: false,
+};
+
+// ── USUARIO ──
+function confirmarUsuario() {
+  const val = document.getElementById('fUsuario').value.trim();
+  if (!val) { toast('Ingresá tu nombre para continuar','warning'); return; }
+  state.usuario = val;
+  document.getElementById('usuarioNombre').textContent = val;
+  document.getElementById('usuarioBadge').style.display = 'flex';
+  cerrarModal('modalUsuario');
+}
+
+// ── JWT ──
+async function getAccessToken() {
+  if (state.tokenCache && Date.now() < state.tokenExp - 60000) return state.tokenCache;
+  const { client_email, private_key } = CONFIG.SA;
+  const now = Math.floor(Date.now()/1000);
+  const hdr = b64u(JSON.stringify({alg:'RS256',typ:'JWT'}));
+  const bdy = b64u(JSON.stringify({iss:client_email,scope:'https://www.googleapis.com/auth/spreadsheets',aud:'https://oauth2.googleapis.com/token',exp:now+3600,iat:now}));
+  const si  = hdr+'.'+bdy;
+  const pem = private_key.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\n/g,'');
+  const bin = Uint8Array.from(atob(pem),c=>c.charCodeAt(0));
+  const key = await crypto.subtle.importKey('pkcs8',bin.buffer,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['sign']);
+  const sig = await crypto.subtle.sign('RSASSA-PKCS1-v1_5',key,new TextEncoder().encode(si));
+  const jwt = si+'.'+b64u(sig);
+  const r   = await fetch('https://oauth2.googleapis.com/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:`grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`});
+  const d   = await r.json();
+  if (!d.access_token) throw new Error('Auth fallida');
+  state.tokenCache = d.access_token; state.tokenExp = Date.now()+d.expires_in*1000;
+  return d.access_token;
+}
+function b64u(v){
+  const s=typeof v==='string'?btoa(unescape(encodeURIComponent(v))):btoa(String.fromCharCode(...new Uint8Array(v)));
+  return s.replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+}
+
+// ── SHEETS API ──
+async function sheetsRead(range){
+  const r=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(range)}?key=${CONFIG.API_KEY}`);
+  if(!r.ok) throw new Error('Error leyendo '+range);
+  return (await r.json()).values||[];
+}
+async function sheetsWrite(range,values){
+  const tk=await getAccessToken();
+  const r=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(range)}?valueInputOption=RAW`,{method:'PUT',headers:{'Authorization':'Bearer '+tk,'Content-Type':'application/json'},body:JSON.stringify({range,majorDimension:'ROWS',values})});
+  if(!r.ok) throw new Error(JSON.stringify(await r.json()));
+}
+async function sheetsAppend(range,values){
+  const tk=await getAccessToken();
+  const r=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(range)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,{method:'POST',headers:{'Authorization':'Bearer '+tk,'Content-Type':'application/json'},body:JSON.stringify({range,majorDimension:'ROWS',values})});
+  if(!r.ok) throw new Error(JSON.stringify(await r.json()));
+}
+async function sheetsClear(range){
+  const tk=await getAccessToken();
+  await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(range)}:clear`,{method:'POST',headers:{'Authorization':'Bearer '+tk}});
+}
+
+// ── LOCK ──
+async function adquirirLock(maxWait=15000){
+  const t0=Date.now();
+  while(Date.now()-t0<maxWait){
+    const rows=await sheetsRead('Lock!A1:B1');
+    const val=rows[0]?.[0]||'libre', ts=parseInt(rows[0]?.[1]||'0');
+    if(val==='libre'||Date.now()-ts>CONFIG.LOCK_TTL_MS){
+      await sheetsWrite('Lock!A1:B1',[['ocupado',Date.now().toString()]]);
+      setStatus('ocupado','Guardando...'); return;
+    }
+    setStatus('ocupado','Esperá... otra PC está guardando');
+    await sleep(2000);
+  }
+  throw new Error('No se pudo adquirir el lock');
+}
+async function liberarLock(){
+  try{await sheetsWrite('Lock!A1:B1',[['libre','0']]);}catch(e){}
+  setStatus('libre','Listo para ingresar datos');
+}
+
+// ── CARGA DE DATOS ──
+async function cargarDatos(){
+  try{
+    setStatus('conectando','Conectando...');
+    const [rExp,rCli,rBul,rCho,rPed]=await Promise.all([
+      sheetsRead('Expresos!A2:B100'),
+      sheetsRead('Clientes!A2:C500'),
+      sheetsRead('Bultos!A2:F1000'),
+      sheetsRead('Choferes!A2:B2'),
+      sheetsRead('Pedidos!A2:D1000'),
+    ]);
+    state.expresos=rExp.filter(r=>r[1]).map((r,i)=>({orden:parseInt(r[0])||i+1,nombre:r[1].trim()}));
+    state.clientes=rCli.filter(r=>r[1]).map((r,i)=>({rowIndex:i+2,nro:r[0]?.trim()||'',nombre:r[1]?.trim()||'',expreso:r[2]?.trim()||''}));
+
+    const hoy=fechaHoy();
+    const fechasEnSheet=[...new Set(rBul.filter(r=>r[0]).map(r=>r[0].trim()))];
+    const hayDatosDeHoy=fechasEnSheet.includes(hoy);
+    const hayDatosViejos=fechasEnSheet.length>0&&!hayDatosDeHoy;
+    const fechaACargar=hayDatosDeHoy?hoy:(fechasEnSheet[fechasEnSheet.length-1]||hoy);
+
+    state.bultos={}; state.comentarios={}; state.usuarios={};
+    rBul.forEach(r=>{
+      if(r[0]===fechaACargar&&r[1]){
+        const nro=r[1].trim();
+        state.bultos[nro]=parseInt(r[3])||0;
+        state.comentarios[nro]=r[4]?.trim()||'';
+        state.usuarios[nro]=r[5]?.trim()||'';
+      }
+    });
+
+    const choferRow=rCho[0];
+    state.choferGlobal=(choferRow&&choferRow[0]===hoy)?choferRow[1]?.trim()||'':'';
+    document.getElementById('choferGlobal').value=state.choferGlobal;
+
+    // Cargar pedidos desde Sheet (sincronizados entre PCs)
+    state.conPedido=new Map();
+    rPed.forEach(r=>{
+      if(r[0]===hoy&&r[1]){
+        const nro=r[1].trim();
+        const cant=parseInt(r[3])||1;
+        state.conPedido.set(nro,cant);
+      }
+    });
+
+    if(hayDatosViejos&&!state.resetModalMostrado){
+      state.resetModalMostrado=true;
+      abrirModal('modalReset');
+    }
+    renderTodo();
+    setStatus('libre','Listo para ingresar datos');
+  }catch(e){
+    setStatus('error','Error de conexión');
+    toast('Error al cargar: '+e.message,'error');
+  }
+}
+
+// ── RESET MANUAL ──
+async function confirmarResetManual(){
+  cerrarModal('modalReset');
+  showLoading('Limpiando datos del día anterior...');
+  try{
+    await adquirirLock();
+    await sheetsClear('Bultos!A2:F1000');
+    await sheetsClear('Choferes!A2:B2');
+    await sheetsClear('Pedidos!A2:D1000');
+    await liberarLock();
+    state.bultos={}; state.comentarios={}; state.usuarios={};
+    state.conPedido=new Map(); state.resetModalMostrado=false;
+    state.choferGlobal=''; document.getElementById('choferGlobal').value='';
+    renderTodo(); toast('Datos borrados. ¡Buen día!','success');
+  }catch(e){ await liberarLock(); toast('Error: '+e.message,'error'); }
+  hideLoading();
+}
+
+// ── RENDER ──
+function renderTodo(){
+  const busq=document.getElementById('busqueda').value.toLowerCase().trim();
+  const main=document.getElementById('mainContent');
+  main.innerHTML='';
+  let tb=0,tp=0,te=0,pend=0;
+
+  state.expresos.forEach(exp=>{
+    let clis=state.clientes.filter(c=>c.expreso===exp.nombre);
+    if(busq){ clis=clis.filter(c=>c.nombre.toLowerCase().includes(busq)||c.nro.includes(busq)); if(!clis.length)return; }
+
+    const bExp=clis.reduce((s,c)=>s+(state.bultos[c.nro]||0),0);
+    const pExp=clis.filter(c=>(state.bultos[c.nro]||0)>0).length;
+    const tienePedidoEnExpreso=clis.some(c=>state.conPedido.has(c.nro));
+    if(bExp>0){tb+=bExp;tp+=pExp;te++;}
+    clis.forEach(c=>{ if(state.conPedido.has(c.nro)&&!(state.bultos[c.nro]>0)) pend++; });
+
+    const card=document.createElement('div');
+    card.className='expreso-card'+(bExp===0&&!tienePedidoEnExpreso?' sin-bultos-print':'');
+    card.dataset.expreso=exp.nombre;
+    card.innerHTML=`
+      <div class="expreso-header" onclick="toggleExpreso(this)">
+        <span class="expreso-num">${exp.orden}</span>
+        <span class="expreso-nombre">${exp.nombre}</span>
+        <div class="expreso-resumen">
+          <span><strong>${bExp}</strong> bultos</span>
+          <span><strong>${pExp}</strong> pedidos</span>
+        </div>
+        <span class="expreso-chevron">▼</span>
+      </div>
+      <div class="expreso-body">
+        <table class="tabla-clientes">
+          <colgroup>
+            <col class="col-nro"><col class="col-nombre"><col class="col-bultos">
+            <col class="col-coment"><col class="col-usuario"><col class="col-acciones"><col class="col-check">
+          </colgroup>
+          <thead><tr>
+            <th>N° Cliente</th><th>Nombre</th><th>Bultos</th>
+            <th>Comentario</th>
+            <th class="no-print">Usuario</th>
+            <th class="no-print"></th>
+            <th>✓</th>
+          </tr></thead>
+          <tbody>
+            ${clis.map(c=>{
+              const b=state.bultos[c.nro]||0;
+              const com=state.comentarios[c.nro]||'';
+              const usr=state.usuarios[c.nro]||'';
+              const tieneP=state.conPedido.has(c.nro);
+              const trCls=b>0?'highlight':(tieneP?'con-pedido':'sin-bultos');
+              return `<tr class="${trCls}" data-nro="${c.nro}">
+                <td class="cliente-nro">${c.nro}</td>
+                <td class="cliente-nombre">${c.nombre}${tieneP&&b===0?`<span class="pedido-badge">${state.conPedido.get(c.nro)} PEDIDO${state.conPedido.get(c.nro)>1?'S':''}</span>`:''}</td>
+                <td><input type="number" min="0" class="input-bultos ${b>0?'tiene-valor':''}"
+                  value="${b>0?b:''}" placeholder="0" data-nro="${c.nro}"
+                  onchange="guardarBultos('${c.nro}',this)"
+                  oninput="this.classList.toggle('tiene-valor',this.value>0)"></td>
+                <td><input type="text" maxlength="80" class="input-comentario ${com?'tiene-valor':''}"
+                  value="${com.replace(/"/g,'&quot;')}" placeholder=""
+                  data-nro="${c.nro}" onchange="guardarComentario('${c.nro}',this)"></td>
+                <td class="usuario-col-td no-print">${usr}</td>
+                <td class="no-print"><button class="btn-edit-cliente" onclick="abrirEditarCliente(${c.rowIndex},'${c.nro}','${c.nombre.replace(/'/g,"\\'")}','${c.expreso}')">✏️</button></td>
+                <td><span class="check-print"></span></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+        <div class="expreso-footer">
+          <button class="btn-add-cliente no-print" onclick="abrirModalCliente('${exp.nombre}')">＋ Agregar cliente a ${exp.nombre}</button>
+          <span style="font-size:11px;color:var(--texto-sub)">${clis.length} clientes</span>
+        </div>
+      </div>`;
+    main.appendChild(card);
+  });
+
+  if(!main.children.length)
+    main.innerHTML=`<div class="no-resultados"><div class="ico">🔍</div><p>Sin resultados para "${busq}"</p></div>`;
+
+  document.getElementById('rTotalBultos').textContent=tb;
+  document.getElementById('rTotalPedidos').textContent=tp;
+  document.getElementById('rTotalExpreso').textContent=te;
+  const pDiv=document.getElementById('resumenPendientes');
+  if(state.conPedido.size>0){pDiv.style.display='flex';document.getElementById('rPendientes').textContent=pend;}
+  else pDiv.style.display='none';
+}
+
+function toggleExpreso(h){h.closest('.expreso-card').classList.toggle('collapsed');}
+function filtrar(){renderTodo();}
+
+// ── GUARDAR BULTOS / COMENTARIO ──
+async function guardarBultos(nro,input){
+  state.bultos[nro]=parseInt(input.value)||0;
+  renderResumen();
+  const tr=input.closest('tr');
+  if(tr){
+    const b=state.bultos[nro];
+    tr.className=b>0?'highlight':(state.conPedido.has(nro)?'con-pedido':'sin-bultos');
+    const badge=tr.querySelector('.pedido-badge');
+    if(badge){
+      if(state.conPedido.has(nro)&&b===0){
+        const n=state.conPedido.get(nro);
+        badge.textContent=`${n} PEDIDO${n>1?'S':''}`;
+        badge.style.display='';
+      } else {
+        badge.style.display='none';
+      }
+    }
+  }
+  await _guardarFila(nro);
+}
+async function guardarComentario(nro,input){
+  state.comentarios[nro]=input.value.trim();
+  input.classList.toggle('tiene-valor',!!input.value.trim());
+  await _guardarFila(nro);
+}
+async function _guardarFila(nro){
+  const hoy=fechaHoy(), cantidad=state.bultos[nro]||0;
+  const comentario=state.comentarios[nro]||'', usuario=state.usuario;
+  const cliente=state.clientes.find(c=>c.nro===nro);
+  const nombre=cliente?.nombre||'';
+  const expreso=cliente?.expreso||'';
+  try{
+    await adquirirLock();
+    const rows=await sheetsRead('Bultos!A2:F1000');
+    let idx=-1; rows.forEach((r,i)=>{if(r[0]===hoy&&r[1]===nro)idx=i;});
+    const fila=[hoy,nro,nombre,cantidad.toString(),comentario,usuario];
+    if(idx>=0) await sheetsWrite(`Bultos!A${idx+2}:F${idx+2}`,[fila]);
+    else       await sheetsAppend('Bultos!A:F',[fila]);
+    await liberarLock();
+  }catch(e){await liberarLock();toast('Error al guardar: '+e.message,'error');}
+  // Registrar en el log de movimientos (no bloquea, no usa el lock de Bultos)
+  registrarMovimiento(nro, nombre, expreso, 'carga_bultos', cantidad, comentario, usuario);
+}
+
+// ── CHOFER GLOBAL ──
+async function guardarChoferGlobal(valor){
+  state.choferGlobal=valor.trim();
+  try{
+    await adquirirLock();
+    await sheetsWrite('Choferes!A2:B2',[[fechaHoy(),state.choferGlobal]]);
+    await liberarLock(); toast('Chofer guardado','success');
+  }catch(e){await liberarLock();toast('Error al guardar chofer','error');}
+}
+
+// ── CARGA EXCEL PEDIDOS ──
+function cargarExcel(input){
+  const files=Array.from(input.files);
+  if(!files.length) return;
+  let totalNuevos=0, totalSumados=0, procesados=0;
+  const pedidosNuevos=[]; // para guardar en Sheet
+  files.forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      try{
+        const wb=XLSX.read(e.target.result,{type:'array'});
+        const ws=wb.Sheets[wb.SheetNames[0]];
+        const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+        rows.forEach(row=>{
+          const colA=String(row[0]||'').trim();
+          const colC=String(row[2]||'').trim();
+          if(colA.toUpperCase().startsWith('CLIENTE')){
+            const match=colC.match(/\((\d+)\)\s*$/);
+            if(match){
+              const nro=match[1];
+              const cliente=state.clientes.find(c=>c.nro===nro);
+              const nombre=cliente?.nombre||colC;
+              if(!state.conPedido.has(nro)){ state.conPedido.set(nro,1); totalNuevos++; pedidosNuevos.push([fechaHoy(),nro,nombre,'1']); }
+              else {
+                const nuevaCant=state.conPedido.get(nro)+1;
+                state.conPedido.set(nro,nuevaCant);
+                pedidosNuevos.push([fechaHoy(),nro,nombre,nuevaCant.toString()]);
+              }
+              totalSumados++;
+              registrarMovimiento(nro,nombre,cliente?.expreso||'','pedido_detectado',null,'',state.usuario);
+            }
+          }
+        });
+      }catch(err){toast('Error en '+file.name+': '+err.message,'error');}
+      procesados++;
+      if(procesados===files.length){
+        // Guardar pedidos en Sheet para sincronizar con otras PCs
+        if(pedidosNuevos.length){
+          guardarPedidosEnSheet(pedidosNuevos);
+        }
+        renderTodo();
+        toast(`${totalSumados} pedidos detectados (${totalNuevos} clientes nuevos) en ${files.length} archivo${files.length>1?'s':''}`, totalSumados>0?'success':'warning');
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  });
+  input.value='';
+}
+
+// ── GUARDAR PEDIDOS EN SHEET (sincronización entre PCs) ──
+async function guardarPedidosEnSheet(pedidos){
+  try{
+    await adquirirLock();
+    // Leer pedidos actuales del día y actualizar cantidades
+    const hoy=fechaHoy();
+    const rows=await sheetsRead('Pedidos!A2:D1000');
+    const updates=[];
+    const nuevos=[];
+    pedidos.forEach(p=>{
+      const nro=p[1];
+      const cant=parseInt(p[3])||1;
+      const idx=rows.findIndex(r=>r[0]===hoy&&r[1]===nro);
+      if(idx>=0){
+        // Actualizar cantidad existente
+        updates.push({range:`Pedidos!A${idx+2}:D${idx+2}`,values:[[hoy,nro,p[2],cant.toString()]]});
+      } else {
+        nuevos.push([hoy,nro,p[2],cant.toString()]);
+      }
+    });
+    for(const u of updates) await sheetsWrite(u.range,u.values);
+    if(nuevos.length) await sheetsAppend('Pedidos!A:D',nuevos);
+    await liberarLock();
+  }catch(e){ await liberarLock(); console.error('Error guardando pedidos:',e); }
+}
+
+// ── CLIENTE NUEVO ──
+function abrirModalCliente(expresoPrefill=''){
+  document.getElementById('fNroCliente').value='';
+  document.getElementById('fNombreCliente').value='';
+  document.getElementById('fExpresoCliente').innerHTML=
+    state.expresos.map(e=>`<option value="${e.nombre}" ${e.nombre===expresoPrefill?'selected':''}>${e.nombre}</option>`).join('');
+  abrirModal('modalCliente');
+}
+async function guardarCliente(){
+  const nro=document.getElementById('fNroCliente').value.trim();
+  const nombre=document.getElementById('fNombreCliente').value.trim();
+  const expreso=document.getElementById('fExpresoCliente').value;
+  if(!nro||!nombre){toast('Completá N° cliente y nombre','warning');return;}
+  if(state.clientes.find(c=>c.nro===nro)){toast('Ya existe ese N° de cliente','warning');return;}
+  showLoading('Guardando cliente...');
+  try{
+    await adquirirLock();
+    await sheetsAppend('Clientes!A:C',[[nro,nombre,expreso]]);
+    await liberarLock();
+    state.clientes.push({rowIndex:state.clientes.length+2,nro,nombre,expreso});
+    cerrarModal('modalCliente'); toast('Cliente agregado','success'); renderTodo();
+  }catch(e){await liberarLock();toast('Error: '+e.message,'error');}
+  hideLoading();
+}
+
+// ── EDITAR CLIENTE ──
+function abrirEditarCliente(rowIndex,nro,nombre,expreso){
+  document.getElementById('eRowIndex').value=rowIndex;
+  document.getElementById('eNroCliente').value=nro;
+  document.getElementById('eNombreCliente').value=nombre;
+  document.getElementById('eExpresoCliente').innerHTML=
+    state.expresos.map(e=>`<option value="${e.nombre}" ${e.nombre===expreso?'selected':''}>${e.nombre}</option>`).join('');
+  abrirModal('modalEditarCliente');
+}
+async function actualizarCliente(){
+  const rowIndex=parseInt(document.getElementById('eRowIndex').value);
+  const nro=document.getElementById('eNroCliente').value.trim();
+  const nombre=document.getElementById('eNombreCliente').value.trim();
+  const expreso=document.getElementById('eExpresoCliente').value;
+  if(!nro||!nombre){toast('Completá todos los campos','warning');return;}
+  showLoading('Actualizando...');
+  try{
+    await adquirirLock();
+    await sheetsWrite(`Clientes!A${rowIndex}:C${rowIndex}`,[[nro,nombre,expreso]]);
+    await liberarLock();
+    const c=state.clientes.find(x=>x.rowIndex===rowIndex);
+    if(c){c.nro=nro;c.nombre=nombre;c.expreso=expreso;}
+    cerrarModal('modalEditarCliente'); toast('Cliente actualizado','success'); renderTodo();
+  }catch(e){await liberarLock();toast('Error: '+e.message,'error');}
+  hideLoading();
+}
+
+// ── GESTOR EXPRESOS ──
+function abrirGestorExpreso(){renderGestorLista();abrirModal('modalExpreso');}
+function renderGestorLista(){
+  document.getElementById('gestorLista').innerHTML=state.expresos.map((e,i)=>`
+    <div class="gestor-item">
+      <span style="color:var(--texto-sub);font-size:12px;min-width:20px">${i+1}</span>
+      <input type="text" value="${e.nombre}">
+      <button class="btn btn-danger btn-sm" onclick="eliminarExpresoGestor(${i})">✕</button>
+    </div>`).join('');
+}
+function agregarExpresoGestor(){state.expresos.push({orden:state.expresos.length+1,nombre:'Nuevo expreso'});renderGestorLista();}
+function eliminarExpresoGestor(idx){
+  if(state.clientes.some(c=>c.expreso===state.expresos[idx].nombre)){toast('Tiene clientes asignados','warning');return;}
+  state.expresos.splice(idx,1);renderGestorLista();
+}
+async function guardarExpresosGestor(){
+  const inputs=document.querySelectorAll('#gestorLista .gestor-item input');
+  const nuevos=Array.from(inputs).map((inp,i)=>({orden:i+1,nombre:inp.value.trim()})).filter(e=>e.nombre);
+  showLoading('Guardando expresos...');
+  try{
+    await adquirirLock();
+    await sheetsClear('Expresos!A2:B200');
+    if(nuevos.length) await sheetsWrite('Expresos!A2:B'+(nuevos.length+1),nuevos.map(e=>[e.orden.toString(),e.nombre]));
+    await liberarLock();
+    state.expresos=nuevos; cerrarModal('modalExpreso'); toast('Expresos guardados','success'); renderTodo();
+  }catch(e){await liberarLock();toast('Error: '+e.message,'error');}
+  hideLoading();
+}
+
+// ── PANEL CONSULTA ──
+function abrirPanel(){
+  document.getElementById('panelFecha').textContent=fechaLarga();
+  let tb=0,tp=0;
+  const lista=state.expresos.map(exp=>{
+    const clis=state.clientes.filter(c=>c.expreso===exp.nombre&&(state.bultos[c.nro]||0)>0)
+      .map(c=>({nombre:c.nombre,bultos:state.bultos[c.nro]}));
+    const bExp=clis.reduce((s,c)=>s+c.bultos,0);
+    tb+=bExp;tp+=clis.length;
+    return{expreso:exp.nombre,clis,bultos:bExp};
+  }).filter(e=>e.bultos>0);
+  document.getElementById('panelTotales').innerHTML=`
+    <div class="panel-total-card"><div class="num">${tb}</div><div class="lbl">Bultos totales</div></div>
+    <div class="panel-total-card"><div class="num">${tp}</div><div class="lbl">Pedidos</div></div>
+    <div class="panel-total-card"><div class="num">${lista.length}</div><div class="lbl">Expresos activos</div></div>`;
+  document.getElementById('panelExpresosGrid').innerHTML=lista.map(e=>`
+    <div class="panel-expreso-card">
+      <h4>${e.expreso}<span>${e.bultos}</span></h4>
+      ${e.clis.map(c=>`<div class="panel-cliente-row"><span class="pnombre">${c.nombre}</span><span class="pbultos">${c.bultos} bto</span></div>`).join('')}
+    </div>`).join('')||'<p style="color:#8ab0d0;padding:10px 0">No hay bultos cargados hoy.</p>';
+  document.getElementById('panelConsulta').classList.add('open');
+}
+function cerrarPanel(){document.getElementById('panelConsulta').classList.remove('open');}
+
+// ── IMPRESIÓN / PDF ──
+function prepararPrint(){
+  document.getElementById('printFecha').textContent='Fecha: '+fechaLarga();
+  document.getElementById('printChofer').textContent=state.choferGlobal?'Chofer: '+state.choferGlobal:'';
+  const tb=Object.values(state.bultos).reduce((s,b)=>s+b,0);
+  const tp=Object.values(state.bultos).filter(b=>b>0).length;
+  document.getElementById('printTotales').textContent=`Total: ${tb} bultos | ${tp} pedidos`;
+  document.querySelectorAll('.expreso-card').forEach(c=>c.classList.remove('collapsed'));
+}
+function imprimir(){prepararPrint();window.print();}
+function exportarExcel(){
+  showLoading('Generando Excel...');
+  sheetsRead('Movimientos!A2:I5000').then(rows=>{
+    const hoy=fechaHoy();
+    const delDia=rows.filter(r=>r[0]===hoy);
+    if(!delDia.length){
+      toast('No hay movimientos registrados hoy todavía','warning');
+      hideLoading();
+      return;
+    }
+    const headers=['fecha','hora','nro_cliente','nombre','expreso','tipo_evento','bultos','comentario','usuario'];
+    const wsData=[headers, ...delDia];
+    const ws=XLSX.utils.aoa_to_sheet(wsData);
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,'Movimientos');
+
+    const d=new Date();
+    const nombreArchivo=`HR-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}.xlsx`;
+    XLSX.writeFile(wb, nombreArchivo);
+    toast('Excel exportado: '+nombreArchivo,'success');
+    hideLoading();
+  }).catch(e=>{
+    toast('Error al exportar: '+e.message,'error');
+    hideLoading();
+  });
+}
+
+// ── REGISTRAR MOVIMIENTO (log histórico, nunca se borra) ──
+async function registrarMovimiento(nro, nombre, expreso, tipoEvento, bultos, comentario, usuario){
+  const d=new Date();
+  const fecha=fechaHoy();
+  const hora=`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+  const fila=[fecha,hora,nro,nombre,expreso,tipoEvento,bultos!==null&&bultos!==undefined?bultos.toString():'',comentario||'',usuario||''];
+  try{
+    await sheetsAppend('Movimientos!A:I',[fila]);
+  }catch(e){
+    console.error('Error registrando movimiento:',e);
+  }
+}
+
+// ── RESET MEDIANOCHE ──
+// Reset automático eliminado — se usa el botón manual de reseteo
+
+// ── UTILIDADES ──
+function renderResumen(){
+  let tb=0,tp=0;const exp=new Set();
+  Object.entries(state.bultos).forEach(([nro,b])=>{
+    if(b>0){tb+=b;tp++;const c=state.clientes.find(x=>x.nro===nro);if(c)exp.add(c.expreso);}
+  });
+  document.getElementById('rTotalBultos').textContent=tb;
+  document.getElementById('rTotalPedidos').textContent=tp;
+  document.getElementById('rTotalExpreso').textContent=exp.size;
+}
+function fechaHoy(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function fechaLarga(){return new Date().toLocaleDateString('es-AR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
+function setStatus(tipo,texto){
+  document.getElementById('statusBadge').className='status-badge '+(tipo==='conectando'?'':tipo);
+  document.getElementById('statusText').textContent=texto;
+}
+function abrirModal(id){document.getElementById(id).classList.add('open');}
+function cerrarModal(id){document.getElementById(id).classList.remove('open');}
+function showLoading(msg='Procesando...'){document.getElementById('loadingMsg').textContent=msg;document.getElementById('loadingOverlay').classList.add('open');}
+function hideLoading(){document.getElementById('loadingOverlay').classList.remove('open');}
+function toast(msg,tipo='info'){
+  const c=document.getElementById('toastContainer'),t=document.createElement('div');
+  t.className='toast '+tipo;
+  t.innerHTML=`<span>${{success:'✅',error:'❌',warning:'⚠️',info:'ℹ️'}[tipo]||''}</span><span>${msg}</span>`;
+  c.appendChild(t);setTimeout(()=>t.remove(),5000);
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+// Sincronizar datos sin rerenderizar (para no interrumpir escritura)
+async function sincronizarDatos(){
+  try{
+    const [rBul,rCho,rPed]=await Promise.all([
+      sheetsRead('Bultos!A2:F1000'),
+      sheetsRead('Choferes!A2:B2'),
+      sheetsRead('Pedidos!A2:D1000'),
+    ]);
+    const hoy=fechaHoy();
+    const fechasEnSheet=[...new Set(rBul.filter(r=>r[0]).map(r=>r[0].trim()))];
+    const hayDatosDeHoy=fechasEnSheet.includes(hoy);
+    const fechaACargar=hayDatosDeHoy?hoy:(fechasEnSheet[fechasEnSheet.length-1]||hoy);
+    const nuevosBultos={},nuevosComentarios={},nuevosUsuarios={};
+    rBul.forEach(r=>{
+      if(r[0]===fechaACargar&&r[1]){
+        const nro=r[1].trim();
+        nuevosBultos[nro]=parseInt(r[3])||0;
+        nuevosComentarios[nro]=r[4]?.trim()||'';
+        nuevosUsuarios[nro]=r[5]?.trim()||'';
+      }
+    });
+    // Solo actualizar campos que NO tienen foco
+    const activo=document.activeElement;
+    const nroActivo=activo?.dataset?.nro;
+    Object.keys(nuevosBultos).forEach(nro=>{
+      if(nro!==nroActivo){
+        state.bultos[nro]=nuevosBultos[nro];
+        state.comentarios[nro]=nuevosComentarios[nro];
+        state.usuarios[nro]=nuevosUsuarios[nro];
+        // Actualizar visualmente solo las filas que cambiaron
+        const inputs=document.querySelectorAll(`[data-nro="${nro}"]`);
+        inputs.forEach(inp=>{
+          if(inp.classList.contains('input-bultos')){
+            const v=nuevosBultos[nro];
+            inp.value=v>0?v:'';
+            inp.classList.toggle('tiene-valor',v>0);
+            const tr=inp.closest('tr');
+            if(tr) tr.className=v>0?'highlight':(state.conPedido.has(nro)?'con-pedido':'sin-bultos');
+          }
+          if(inp.classList.contains('input-comentario')){
+            inp.value=nuevosComentarios[nro]||'';
+            inp.classList.toggle('tiene-valor',!!(nuevosComentarios[nro]));
+          }
+        });
+      }
+    });
+    // Pedidos
+    const nuevosPedidos=new Map();
+    rPed.forEach(r=>{ if(r[0]===hoy&&r[1]) nuevosPedidos.set(r[1].trim(),parseInt(r[3])||1); });
+    state.conPedido=nuevosPedidos;
+    // Chofer
+    const choferRow=rCho[0];
+    if(choferRow&&choferRow[0]===hoy&&choferRow[1]!==state.choferGlobal){
+      state.choferGlobal=choferRow[1]?.trim()||'';
+      const inp=document.getElementById('choferGlobal');
+      if(inp&&inp!==activo) inp.value=state.choferGlobal;
+    }
+    renderResumen();
+  }catch(e){ /* silencioso */ }
+}
+
+async function init(){
+  await cargarDatos();
+  // Auto-refresh que no interrumpe la escritura activa
+  setInterval(async()=>{
+    const activo=document.activeElement;
+    const esInput=activo&&(activo.tagName==='INPUT'||activo.tagName==='TEXTAREA');
+    if(esInput){
+      // Solo actualizar datos en memoria, no rerenderizar
+      await sincronizarDatos();
+    } else {
+      await cargarDatos();
+    }
+  }, CONFIG.REFRESH_MS);
+}
+init();
+</script>
+</body>
+</html>
